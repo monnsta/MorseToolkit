@@ -9,6 +9,7 @@ from morse.solving.scorer import MorseScorer
 
 @dataclass(frozen=True, slots=True)
 class _WordMatch:
+	"""Internal record of a successful word match and its score."""
 	word: str
 	end: int
 	score: float
@@ -16,12 +17,19 @@ class _WordMatch:
 
 @dataclass(frozen=True, slots=True)
 class _SolverState:
+	"""Internal state container tracking DP path scores during solving."""
 	text: str
 	score: float
 	context: tuple[str, ...]
 
 
 class MorseSolver:
+	"""Resolves unspaced Morse sequences into optimal text candidates.
+
+	Uses dynamic programming and a trie-based dictionary index to find the 
+	highest-scoring sequence of valid words.
+	"""
+
 	def __init__(
 		self,
 		alphabet: MorseAlphabet,
@@ -29,6 +37,17 @@ class MorseSolver:
 		scorer: MorseScorer,
 		max_word_length: int = 32,
 	) -> None:
+		"""Initializes the solver.
+
+		Args:
+			alphabet: The alphabet to use for character mapping.
+			dictionary: Dictionary of valid target words.
+			scorer: Scoring algorithm to evaluate word candidates.
+			max_word_length: Limit on text word character count to optimize trie traversal.
+
+		Raises:
+			ValueError: If max_word_length is less than 1.
+		"""
 		if max_word_length < 1:
 			raise ValueError(
 				"Maximum word length must be at least 1"
@@ -48,6 +67,7 @@ class MorseSolver:
 	) -> Iterator[
 		tuple[str, tuple[MorseSymbol, ...]]
 	]:
+		"""Encodes dictionary words into valid symbol sequences for trie indexing."""
 		for word in self.dictionary.words():
 			symbols: list[MorseSymbol] = []
 
@@ -68,6 +88,14 @@ class MorseSolver:
 		self,
 		sequence: MorseSequence,
 	) -> MorseCandidate | None:
+		"""Finds the most likely sentence/phrase for a continuous Morse sequence.
+
+		Args:
+			sequence: The continuous MorseSequence to decrypt.
+
+		Returns:
+			A MorseCandidate representing the best scoring text match, or None if unsolvable.
+		"""
 		if not sequence:
 			return MorseCandidate("", 0.0)
 
@@ -131,6 +159,7 @@ class MorseSolver:
 		sequence: MorseSequence,
 		position: int,
 	) -> Iterator[_WordMatch]:
+		"""Yields all matching words starting at the given position."""
 		for match in self._word_index.matches(
 			sequence.symbols,
 			position,
@@ -147,6 +176,7 @@ class MorseSolver:
 		context: tuple[str, ...],
 		word: str,
 	) -> tuple[str, ...]:
+		"""Updates trailing word context bounds based on the scorer's configuration."""
 		size = self.scorer.context_size
 
 		if size == 0:

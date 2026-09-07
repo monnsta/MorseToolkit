@@ -6,12 +6,19 @@ from morse.core import MorseSymbol
 
 @dataclass(frozen=True, slots=True)
 class MorseWordMatch:
+	"""Represents a matched word within a Morse sequence.
+
+	Attributes:
+		word: The matched plain text word.
+		end: The exclusive index in the sequence where the match ends.
+	"""
 	word: str
 	end: int
 
 
 @dataclass(slots=True)
 class _MorseTrieNode:
+	"""Internal node structure for the Morse word trie."""
 	children: dict[MorseSymbol, "_MorseTrieNode"] = field(
 		default_factory=dict
 	)
@@ -21,12 +28,22 @@ class _MorseTrieNode:
 
 
 class MorseWordIndex:
+	"""A prefix-tree (Trie) index mapping Morse symbol sequences to valid words.
+
+	Optimizes the search for matching dictionary words within a continuous Morse sequence.
+	"""
+
 	def __init__(
 		self,
 		word_codes: Iterator[
 			tuple[str, tuple[MorseSymbol, ...]]
 		],
 	) -> None:
+		"""Initializes the trie and populates it with word-symbol mappings.
+
+		Args:
+			word_codes: An iterator yielding tuples of a text word and its encoded Morse symbols.
+		"""
 		self._root = _MorseTrieNode()
 
 		for word, symbols in word_codes:
@@ -37,6 +54,15 @@ class MorseWordIndex:
 		word: str,
 		symbols: tuple[MorseSymbol, ...],
 	) -> None:
+		"""Inserts a word and its corresponding Morse sequence into the trie.
+
+		Args:
+			word: The plain text word.
+			symbols: The sequence of Morse symbols representing the word.
+
+		Raises:
+			ValueError: If the symbol sequence is empty.
+		"""
 		if not symbols:
 			raise ValueError(
 				"Cannot index an empty Morse sequence"
@@ -60,6 +86,16 @@ class MorseWordIndex:
 		position: int,
 		max_word_length: int,
 	) -> Iterator[MorseWordMatch]:
+		"""Finds all valid dictionary words that match the sequence starting at a given position.
+
+		Args:
+			sequence: The full sequence of Morse symbols being evaluated.
+			position: The starting index within the sequence to check for matches.
+			max_word_length: The maximum allowed length of a matching text word.
+
+		Yields:
+			MorseWordMatch instances representing valid words found.
+		"""
 		if position >= len(sequence):
 			return
 

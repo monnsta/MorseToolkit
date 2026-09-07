@@ -9,11 +9,22 @@ from morse.core import (
 
 
 class MorseSegmenter:
+	"""Splits continuous Morse sequences into valid character segmentations."""
+
 	def __init__(
 		self,
 		alphabet: MorseAlphabet,
 		max_character_length: int = 6,
 	) -> None:
+		"""Initializes the segmenter.
+
+		Args:
+			alphabet: The alphabet used to validate potential character symbol sequences.
+			max_character_length: Maximum allowed symbols per individual character.
+
+		Raises:
+			ValueError: If max_character_length is less than 1.
+		"""
 		if max_character_length < 1:
 			raise ValueError(
 				"Maximum character length must be at least 1"
@@ -26,6 +37,14 @@ class MorseSegmenter:
 		self,
 		sequence: MorseSequence,
 	) -> Iterator[MorseSegmentation]:
+		"""Generates all valid character segmentations for a given sequence.
+
+		Args:
+			sequence: The target Morse sequence to segment.
+
+		Yields:
+			Valid MorseSegmentation instances.
+		"""
 		if not sequence:
 			yield MorseSegmentation(())
 			return
@@ -42,6 +61,7 @@ class MorseSegmenter:
 		position: int,
 		characters: tuple[tuple[MorseSymbol, ...], ...],
 	) -> Iterator[MorseSegmentation]:
+		"""Recursively finds valid character segmentations from a given position."""
 		if position == len(sequence):
 			yield MorseSegmentation(characters)
 			return
