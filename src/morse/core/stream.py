@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Iterator
+from collections.abc import Iterator, Iterable
 
 from .tokens import MorseToken
 
@@ -42,7 +42,7 @@ class MorseStream:
 		return self.tokens[index]
 
 	@classmethod
-	def from_tokens(cls, tokens: Iterator[MorseToken]) -> "MorseStream":
+	def from_tokens(cls, tokens: Iterable[MorseToken]) -> "MorseStream":
 		"""Constructs a MorseStream from an iterator of tokens.
 
 		Args:

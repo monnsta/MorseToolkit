@@ -1,13 +1,12 @@
 from collections.abc import Mapping, Sequence
 
-from morse.core import MorseAlphabet
-from morse.core import MorseSymbol
+from morse.core import MorseAlphabet, MorseSymbol
 
 
 class InternationalMorse(MorseAlphabet):
 	"""Implementation of the standard International Morse Code alphabet.
 
-	Supports alphanumeric characters (A-Z, 0-9) and standard punctuation marks.
+	Supports alphanumeric characters (A-Z, 0-9) and standard punctuation symbols.
 	Case-insensitive during encoding.
 	"""
 
@@ -70,8 +69,15 @@ class InternationalMorse(MorseAlphabet):
 		"@": ".--.-.",
 	}
 
+	def __init__(self) -> None:
+		"""Initializes the reverse lookup mapping table for decoding optimization."""
+		self._reverse_codes = {
+			code: character
+			for character, code in self._CODES.items()
+		}
+
 	def encode(self, character: str) -> tuple[MorseSymbol, ...]:
-		"""Encodes a single character into standard Morse symbols.
+		"""Encodes a single supported character into standard Morse symbols.
 
 		Args:
 			character: A single string character to encode. Case-insensitive.
@@ -101,20 +107,19 @@ class InternationalMorse(MorseAlphabet):
 			symbols: A sequence of MorseSymbol instances.
 
 		Returns:
-			The decoded uppercase string character.
+			The decoded uppercase string character or punctuation symbol.
 
 		Raises:
 			ValueError: If the symbol sequence does not map to a valid character.
 		"""
 		code = "".join(symbol.value for symbol in symbols)
 
-		for character, character_code in self._CODES.items():
-			if character_code == code:
-				return character
-
-		raise ValueError(
-			f"Unsupported Morse sequence: {code!r}"
-		)
+		try:
+			return self._reverse_codes[code]
+		except KeyError as exc:
+			raise ValueError(
+				f"Unsupported Morse sequence: {code!r}"
+			) from exc
 
 	def can_encode(self, character: str) -> bool:
 		"""Checks whether a character is supported by International Morse.
@@ -137,4 +142,5 @@ class InternationalMorse(MorseAlphabet):
 			True if symbols can be decoded, False otherwise.
 		"""
 		code = "".join(symbol.value for symbol in symbols)
-		return code in self._CODES.values()
+
+		return code in self._reverse_codes

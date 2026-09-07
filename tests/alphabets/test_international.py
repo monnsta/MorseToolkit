@@ -1,3 +1,5 @@
+import pytest
+
 from morse.alphabets import InternationalMorse
 from morse.core.symbols import MorseSymbol
 
@@ -32,3 +34,40 @@ def test_can_encode() -> None:
 	assert alphabet.can_encode("A")
 	assert alphabet.can_encode("5")
 	assert not alphabet.can_encode("^")
+
+
+def test_can_decode() -> None:
+	alphabet = InternationalMorse()
+
+	assert alphabet.can_decode((
+		MorseSymbol.DOT,
+		MorseSymbol.DASH,
+	))
+
+	assert not alphabet.can_decode((
+		MorseSymbol.DOT,
+		MorseSymbol.DOT,
+		MorseSymbol.DOT,
+		MorseSymbol.DOT,
+		MorseSymbol.DOT,
+		MorseSymbol.DOT,
+		MorseSymbol.DOT,
+	))
+
+
+def test_decode_rejects_unknown_sequence() -> None:
+	alphabet = InternationalMorse()
+
+	with pytest.raises(
+		ValueError,
+		match="Unsupported Morse sequence",
+	):
+		alphabet.decode((
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+		))
