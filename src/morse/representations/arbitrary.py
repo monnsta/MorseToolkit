@@ -18,7 +18,8 @@ class ArbitraryRepresentation(MorseRepresentation):
 			mapping: Mapping containing entries for both MorseSymbol.DOT and MorseSymbol.DASH.
 
 		Raises:
-			ValueError: If DOT or DASH key is missing, or if string representations are identical.
+			ValueError: If DOT or DASH key is missing, representations are empty,
+			            identical, or one representation is a prefix of the other.
 		"""
 		self._mapping = dict(mapping)
 
@@ -30,10 +31,22 @@ class ArbitraryRepresentation(MorseRepresentation):
 
 		values = tuple(self._mapping.values())
 
+		if any(not value for value in values):
+			raise ValueError(
+				"Symbol representations cannot be empty"
+			)
+
 		if len(set(values)) != len(values):
 			raise ValueError(
 				"Dot and dash representations must be different"
 			)
+
+		for first in values:
+			for second in values:
+				if first != second and second.startswith(first):
+					raise ValueError(
+						"Symbol representations cannot be prefixes of each other"
+					)
 
 		self._reverse_mapping = {
 			value: symbol
@@ -69,6 +82,35 @@ class ArbitraryRepresentation(MorseRepresentation):
 			raise ValueError(
 				f"Invalid Morse representation: {value!r}"
 			) from exc
+
+	def decode_sequence(self, value: str) -> tuple[MorseSymbol, ...]:
+		"""Parses and decodes a continuous sequence string of custom representations.
+
+		Args:
+			value: The sequence string representation to decode.
+
+		Returns:
+			A tuple of decoded MorseSymbol instances.
+
+		Raises:
+			ValueError: If an unrecognized token sequence is encountered at any position.
+		"""
+		symbols: list[MorseSymbol] = []
+		position = 0
+
+		while position < len(value):
+			for representation, symbol in self._reverse_mapping.items():
+				if value.startswith(representation, position):
+					symbols.append(symbol)
+					position += len(representation)
+					break
+			else:
+				raise ValueError(
+					f"Invalid Morse representation at position "
+					f"{position}: {value[position:]!r}"
+				)
+
+		return tuple(symbols)
 
 	def can_decode(self, value: str) -> bool:
 		"""Checks whether a given string value matches a configured symbol representation.

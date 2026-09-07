@@ -37,6 +37,21 @@ class MorseRepresentation(ABC):
 		raise NotImplementedError
 
 	@abstractmethod
+	def decode_sequence(self, value: str) -> tuple[MorseSymbol, ...]:
+		"""Deserializes a string representing multiple symbols into a tuple of MorseSymbols.
+
+		Args:
+			value: The sequence string representation to decode.
+
+		Returns:
+			A tuple of decoded MorseSymbol instances.
+
+		Raises:
+			NotImplementedError: Must be implemented by subclasses.
+		"""
+		raise NotImplementedError
+
+	@abstractmethod
 	def can_decode(self, value: str) -> bool:
 		"""Checks whether a given string value can be decoded.
 
@@ -47,3 +62,4 @@ class MorseRepresentation(ABC):
 			True if the string value is valid, False otherwise.
 		"""
 		raise NotImplementedError
+
