@@ -127,3 +127,77 @@ class FrequencyScorer(MorseScorer):
 	def context_size(self) -> int:
 		"""Context size for FrequencyScorer is 0."""
 		return 0
+
+
+class BigramScorer(MorseScorer):
+	"""Scores words using optional previous-word transition weights.
+
+	This scorer is intentionally small and deterministic. It does not try to
+	model language; it simply allows callers to express preferences such as
+	"new york" being preferable to "new cat".
+	"""
+
+	def __init__(
+		self,
+		transitions: Mapping[tuple[str, str], float],
+		default_score: float = 0.0,
+	) -> None:
+		"""Initializes the bigram scorer.
+
+		Args:
+			transitions: A mapping of (previous_word, target_word) tuples to scores.
+			default_score: Score to assign if a transition is missing from the mapping.
+
+		Raises:
+			ValueError: If default_score or any transition scores are negative.
+		"""
+		if default_score < 0.0:
+			raise ValueError(
+				"Default score cannot be negative"
+			)
+
+		self._transitions = {
+			(
+				previous.strip().lower(),
+				word.strip().lower(),
+			): score
+			for (previous, word), score in transitions.items()
+			if previous.strip() and word.strip()
+		}
+		self._default_score = default_score
+
+		if any(score < 0.0 for score in self._transitions.values()):
+			raise ValueError(
+				"Transition scores cannot be negative"
+			)
+
+	def score(
+		self,
+		word: str,
+		context: tuple[str, ...] = (),
+	) -> float:
+		"""Scores the word given the preceding context word.
+
+		Args:
+			word: The target word to evaluate.
+			context: A tuple containing preceding words.
+
+		Returns:
+			The score for the transition if context is present, or default score.
+		"""
+		normalized_word = word.strip().lower()
+
+		if not context:
+			return self._default_score
+
+		previous = context[-1].strip().lower()
+
+		return self._transitions.get(
+			(previous, normalized_word),
+			self._default_score,
+		)
+
+	@property
+	def context_size(self) -> int:
+		"""Context size for BigramScorer is 1."""
+		return 1

@@ -5,7 +5,9 @@ from morse.solving import (
 	DictionaryScorer,
 	MorseSolver,
 	FrequencyScorer,
+	BigramScorer,
 )
+
 
 def make_solver(words: list[str]) -> MorseSolver:
 	dictionary = MorseDictionary(words)
@@ -186,3 +188,68 @@ def test_solver_prefers_higher_scoring_segmentation() -> None:
 	assert result is not None
 	assert result.text == "et"
 	assert result.score == 5.0
+
+
+def test_contextual_solver_uses_previous_word() -> None:
+	dictionary = MorseDictionary([
+		"new",
+		"york",
+		"cat",
+	])
+
+	scorer = BigramScorer({
+		("new", "york"): 10.0,
+		("new", "cat"): 1.0,
+	})
+
+	solver = MorseSolver(
+		InternationalMorse(),
+		dictionary,
+		scorer,
+	)
+
+	sequence = encode_unspaced("newyork")
+
+	result = solver.solve(sequence)
+
+	assert result is not None
+	assert result.text == "new york"
+
+
+def test_solver_rejects_invalid_beam_width() -> None:
+	dictionary = MorseDictionary(["hello"])
+	scorer = DictionaryScorer(dictionary)
+
+	try:
+		MorseSolver(
+			InternationalMorse(),
+			dictionary,
+			scorer,
+			beam_width=0,
+		)
+	except ValueError:
+		pass
+	else:
+		raise AssertionError(
+			"Expected ValueError"
+	)
+
+
+def test_context_free_solver_does_not_reject_repeated_words() -> None:
+	dictionary = MorseDictionary([
+		"the",
+		"cat",
+	])
+
+	solver = MorseSolver(
+		InternationalMorse(),
+		dictionary,
+		DictionaryScorer(dictionary),
+	)
+
+	sequence = encode_unspaced("thethecat")
+
+	result = solver.solve(sequence)
+
+	assert result is not None
+	assert result.text == "the the cat"
