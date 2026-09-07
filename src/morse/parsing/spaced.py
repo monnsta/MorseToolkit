@@ -7,17 +7,37 @@ from .tokenizer import MorseTokenizer, TokenType
 
 
 class SpacedParser(MorseParser[MorseStream]):
+	"""Parses boundary-delimited string representations into a fully structured MorseStream."""
+
 	def __init__(
 		self,
 		representation: MorseRepresentation,
 		boundaries: MorseBoundarySyntax | None = None,
 		tokenizer: MorseTokenizer | None = None,
 	) -> None:
+		"""Initializes the spaced parser.
+
+		Args:
+			representation: Decoder for translating values into symbols.
+			boundaries: Optional custom boundary syntax definition.
+			tokenizer: Optional custom tokenizer instance.
+		"""
 		self.representation = representation
 		self.boundaries = boundaries or MorseBoundarySyntax()
 		self.tokenizer = tokenizer or MorseTokenizer(self.boundaries)
 
 	def parse(self, value: str) -> MorseStream:
+		"""Tokenizes and parses a delimited string into a Morse stream.
+
+		Args:
+			value: The spaced Morse string input.
+
+		Returns:
+			A fully constructed MorseStream with discrete symbol, character, and word tokens.
+
+		Raises:
+			ValueError: If an unexpected raw token type is encountered or if sequence decoding fails.
+		"""
 		raw_tokens = self.tokenizer.tokenize(value)
 		tokens: list[MorseToken] = []
 
