@@ -97,6 +97,13 @@ class InternationalMorse(MorseAlphabet):
 			MorseSymbol.DOT,
 			MorseSymbol.DOT,
 		),
+		"É": (
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+		),
 
 		"0": (
 			MorseSymbol.DASH,
