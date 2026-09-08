@@ -62,4 +62,3 @@ class MorseRepresentation(ABC):
 			True if the string value is valid, False otherwise.
 		"""
 		raise NotImplementedError
-
