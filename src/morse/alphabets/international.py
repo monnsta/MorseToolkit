@@ -10,63 +10,305 @@ class InternationalMorse(MorseAlphabet):
 	Case-insensitive during encoding.
 	"""
 
-	_CODES: Mapping[str, str] = {
-		"A": ".-",
-		"B": "-...",
-		"C": "-.-.",
-		"D": "-..",
-		"E": ".",
-		"F": "..-.",
-		"G": "--.",
-		"H": "....",
-		"I": "..",
-		"J": ".---",
-		"K": "-.-",
-		"L": ".-..",
-		"M": "--",
-		"N": "-.",
-		"O": "---",
-		"P": ".--.",
-		"Q": "--.-",
-		"R": ".-.",
-		"S": "...",
-		"T": "-",
-		"U": "..-",
-		"V": "...-",
-		"W": ".--",
-		"X": "-..-",
-		"Y": "-.--",
-		"Z": "--..",
+	_CODES: Mapping[str, tuple[MorseSymbol, ...]] = {
+		"A": (MorseSymbol.DOT, MorseSymbol.DASH),
+		"B": (
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+		),
+		"C": (
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+		),
+		"D": (MorseSymbol.DASH, MorseSymbol.DOT, MorseSymbol.DOT),
+		"E": (MorseSymbol.DOT,),
+		"F": (
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+		),
+		"G": (MorseSymbol.DASH, MorseSymbol.DASH, MorseSymbol.DOT),
+		"H": (
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+		),
+		"I": (MorseSymbol.DOT, MorseSymbol.DOT),
+		"J": (
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+		),
+		"K": (MorseSymbol.DASH, MorseSymbol.DOT, MorseSymbol.DASH),
+		"L": (
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+		),
+		"M": (MorseSymbol.DASH, MorseSymbol.DASH),
+		"N": (MorseSymbol.DASH, MorseSymbol.DOT),
+		"O": (MorseSymbol.DASH, MorseSymbol.DASH, MorseSymbol.DASH),
+		"P": (
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+		),
+		"Q": (
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+		),
+		"R": (MorseSymbol.DOT, MorseSymbol.DASH, MorseSymbol.DOT),
+		"S": (MorseSymbol.DOT, MorseSymbol.DOT, MorseSymbol.DOT),
+		"T": (MorseSymbol.DASH,),
+		"U": (MorseSymbol.DOT, MorseSymbol.DOT, MorseSymbol.DASH),
+		"V": (
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+		),
+		"W": (MorseSymbol.DOT, MorseSymbol.DASH, MorseSymbol.DASH),
+		"X": (
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+		),
+		"Y": (
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+		),
+		"Z": (
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+		),
 
-		"0": "-----",
-		"1": ".----",
-		"2": "..---",
-		"3": "...--",
-		"4": "....-",
-		"5": ".....",
-		"6": "-....",
-		"7": "--...",
-		"8": "---..",
-		"9": "----.",
+		"0": (
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+		),
+		"1": (
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+		),
+		"2": (
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+		),
+		"3": (
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+		),
+		"4": (
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+		),
+		"5": (
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+		),
+		"6": (
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+		),
+		"7": (
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+		),
+		"8": (
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+		),
+		"9": (
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+		),
 
-		".": ".-.-.-",
-		",": "--..--",
-		"?": "..--..",
-		"'": ".----.",
-		"!": "-.-.--",
-		"/": "-..-.",
-		"(": "-.--.",
-		")": "-.--.-",
-		"&": ".-...",
-		":": "---...",
-		";": "-.-.-.",
-		"=": "-...-",
-		"+": ".-.-.",
-		"-": "-....-",
-		"_": "..--.-",
-		'"': ".-..-.",
-		"$": "...-..-",
-		"@": ".--.-.",
+		".": (
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+		),
+		",": (
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+		),
+		"?": (
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+		),
+		"'": (
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+		),
+		"!": (
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+		),
+		"/": (
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+		),
+		"(": (
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+		),
+		")": (
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+		),
+		"&": (
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+		),
+		":": (
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+		),
+		";": (
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+		),
+		"=": (
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+		),
+		"+": (
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+		),
+		"-": (
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+		),
+		"_": (
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+		),
+		'"': (
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+		),
+		"$": (
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+		),
+		"@": (
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+			MorseSymbol.DOT,
+		),
 	}
 
 	def __init__(self) -> None:
@@ -89,16 +331,11 @@ class InternationalMorse(MorseAlphabet):
 			ValueError: If the character is not supported by standard International Morse.
 		"""
 		try:
-			code = self._CODES[character.upper()]
+			return self._CODES[character.upper()]
 		except KeyError as exc:
 			raise ValueError(
 				f"Unsupported character: {character!r}"
 			) from exc
-
-		return tuple(
-			MorseSymbol.DOT if symbol == "." else MorseSymbol.DASH
-			for symbol in code
-		)
 
 	def decode(self, symbols: Sequence[MorseSymbol]) -> str:
 		"""Decodes a sequence of Morse symbols into its uppercase character equivalent.
@@ -112,13 +349,13 @@ class InternationalMorse(MorseAlphabet):
 		Raises:
 			ValueError: If the symbol sequence does not map to a valid character.
 		"""
-		code = "".join(symbol.value for symbol in symbols)
+		code = tuple(symbols)
 
 		try:
 			return self._reverse_codes[code]
 		except KeyError as exc:
 			raise ValueError(
-				f"Unsupported Morse sequence: {code!r}"
+				f"Unsupported Morse sequence: {symbols!r}"
 			) from exc
 
 	def can_encode(self, character: str) -> bool:
@@ -141,6 +378,4 @@ class InternationalMorse(MorseAlphabet):
 		Returns:
 			True if symbols can be decoded, False otherwise.
 		"""
-		code = "".join(symbol.value for symbol in symbols)
-
-		return code in self._reverse_codes
+		return tuple(symbols) in self._reverse_codes
