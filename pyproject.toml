@@ -15,6 +15,17 @@ authors = [
 ]
 dependencies = []
 
+[project.optional-dependencies]
+cli = [
+	"typer>=0.16",
+	"rich>=13.9",
+	"prompt-toolkit>=3.0.50",
+	"platformdirs>=4.3",
+]
+
+[project.scripts]
+morse = "morse.cli:main"
+
 [tool.setuptools.dynamic]
 version = { attr = "morse.__version__" }
 
