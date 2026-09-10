@@ -249,7 +249,7 @@ Start with:
 
 - [`docs/getting-started.md`](docs/getting-started.md)
 - [`docs/user-guide.md`](docs/user-guide.md)
-- [`docs/representations.md`](docs/representations.md)
+- [`docs/representation.md`](docs/representation.md)
 - [`docs/alphabets.md`](docs/alphabets.md)
 - [`docs/parsing.md`](docs/parsing.md)
 - [`docs/solving.md`](docs/solving.md)
