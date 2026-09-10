@@ -1,6 +1,18 @@
-# MorseToolkit
+<div align="center">
+  <img src="docs/logo.png" width="128" height="128" alt="MorseToolkit Logo">
 
-A flexible Python toolkit for encoding, decoding, parsing, and solving Morse code.
+  # MorseToolkit
+
+  [![CI](https://github.com/monnsta/MorseToolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/monnsta/MorseToolkit/actions/workflows/ci.yml)
+  [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/monnsta/MorseToolkit/blob/main/LICENSE)
+  [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+
+  <p><b>A flexible Python toolkit for encoding, decoding, parsing, and solving Morse code.</b></p>
+
+</div>
+
+---
 
 MorseToolkit provides a simple high-level API for everyday use, while exposing lower-level components for applications that need more control.
 
