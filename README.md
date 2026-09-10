@@ -87,12 +87,12 @@ A dictionary (preferably an english word list) can be supplied to determine how 
 import morse
 
 result = morse.solve(
-	"......-...-..---.-----.-..-..-..",
-	["hello", "world"],
+   "......-...-..---.-----.-..-..-..",
+   ["hello", "world"],
 )
 
 print(result.text)
-# hello
+# hello world
 ```
 
 For multiple words:
@@ -101,8 +101,8 @@ For multiple words:
 import morse
 
 result = morse.solve(
-	morse.encode_unspaced("egg and toast"), # .--.--..--.-..----.-...-
-	["egg", "and", "toast"],
+   morse.encode_unspaced("egg and toast"), # .--.--..--.-..----.-...-
+   ["egg", "and", "toast"],
 )
 
 print(result.text)
@@ -118,34 +118,35 @@ For repeated use or customization, create a `Morse` instance instead of using th
 ```python
 from morse import Morse
 
-morse = Morse()
+morse_toolkit = Morse()
 
-encoded = morse.encode("HELLO WORLD")
-decoded = morse.decode(encoded)
+encoded = morse_toolkit.encode("HELLO WORLD")
+decoded = morse_toolkit.decode(encoded)
 
 print(encoded)
 print(decoded)
 ```
 
-The instance keeps its configuration together, making it useful when working with custom alphabets, representations, dictionaries, or scoring strategies.
+The instance keeps its configuration together, making it useful when working with custom alphabets or representations.
 
-For example, a dictionary can be configured once:
+For example, a dictionary can be configured once and reused:
 
 ```python
 from morse import Morse
 
-morse = Morse(
-	dictionary=[
-		"hello",
-		"world",
-		"egg",
-		"and",
-		"toast",
-	],
-)
+morse_toolkit = Morse()
 
-result = morse.solve(
-	morse.encode_unspaced("egg and toast")
+dictionary = morse_toolkit.dictionary([
+    "hello",
+    "world",
+    "egg",
+    "and",
+    "toast",
+])
+
+result = morse_toolkit.solve(
+   morse_toolkit.encode_unspaced("egg and toast"),
+    dictionary
 )
 
 print(result.text)
@@ -159,18 +160,18 @@ If you need more control than `decode()` provides, MorseToolkit can expose the p
 ```python
 from morse import Morse
 
-morse = Morse()
+morse_toolkit = Morse()
 
-stream = morse.parse(".... . .-.. .-.. ---")
+stream = morse_toolkit.parse(".... . .-.. .-.. ---")
 
 for token in stream:
-	print(token)
+   print(token)
 ```
 
 Continuous Morse can similarly be parsed into a `MorseSequence`:
 
 ```python
-sequence = morse.parse_unspaced("......-...-..---")
+sequence = morse_toolkit.parse_unspaced("......-...-..---")
 ```
 
 These lower-level interfaces are useful when building applications on top of MorseToolkit.
@@ -187,15 +188,15 @@ from morse.core import MorseSymbol
 from morse.representations import ArbitraryRepresentation
 
 representation = ArbitraryRepresentation({
-	MorseSymbol.DOT: "s",
-	MorseSymbol.DASH: "d",
+   MorseSymbol.DOT: "s",
+   MorseSymbol.DASH: "d",
 })
 
-morse = Morse(
-	representation=representation,
+morse_toolkit = Morse(
+   representation=representation,
 )
 
-encoded = morse.encode("HELLO")
+encoded = morse_toolkit.encode("HELLO")
 
 print(encoded)
 ```
@@ -203,7 +204,7 @@ print(encoded)
 The same representation is used when decoding:
 
 ```python
-decoded = morse.decode(encoded)
+decoded = morse_toolkit.decode(encoded)
 
 print(decoded)
 # HELLO
@@ -222,7 +223,7 @@ import morse
 
 morse.encode("HELLO")
 morse.decode(".... . .-.. .-.. ---")
-morse.solve("......-...-..----......-..", ["hello", "world"])
+morse.solve("......-...-..---.-----.-..-..-..", ["hello", "world"])
 ```
 
 Applications that need more control can use the `Morse` class and configure:

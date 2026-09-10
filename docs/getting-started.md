@@ -87,7 +87,7 @@ You can also decode a complete sentence:
 import morse
 
 decoded = morse.decode(
-	".... . .-.. .-.. ---   .-- --- .-. .-.. -.."
+   ".... . .-.. .-.. ---   .-- --- .-. .-.. -.."
 )
 
 print(decoded)
@@ -149,8 +149,8 @@ could potentially be split into different combinations of Morse characters.
 import morse
 
 result = morse.solve(
-	"......-...-..---",
-	["hello"],
+   "......-...-..---",
+   ["hello"],
 )
 
 print(result.text)
@@ -174,8 +174,8 @@ import morse
 value = morse.encode_unspaced("egg and toast")
 
 result = morse.solve(
-	value,
-	["egg", "and", "toast"],
+   value,
+   ["egg", "and", "toast"],
 )
 
 print(result.text)
@@ -198,10 +198,10 @@ For more control, create a `Morse` instance:
 ```python
 from morse import Morse
 
-morse = Morse()
+morse_toolkit = Morse()
 
-encoded = morse.encode("HELLO WORLD")
-decoded = morse.decode(encoded)
+encoded = morse_toolkit.encode("HELLO WORLD")
+decoded = morse_toolkit.decode(encoded)
 
 print(encoded)
 print(decoded)
@@ -209,29 +209,30 @@ print(decoded)
 
 A `Morse` instance keeps configuration together, allowing you to customize how MorseToolkit behaves.
 
-For example, a dictionary can be attached to an instance:
+For example, a dictionary can be compiled once and attached during solving:
 
 ```python
 from morse import Morse
 
-morse = Morse(
-	dictionary=[
-		"hello",
-		"world",
-		"egg",
-		"and",
-		"toast",
-	],
-)
+morse_toolkit = Morse()
 
-result = morse.solve(
-	morse.encode_unspaced("egg and toast")
+dictionary = morse_toolkit.dictionary([
+    "hello",
+    "world",
+    "egg",
+    "and",
+    "toast",
+])
+
+result = morse_toolkit.solve(
+   morse_toolkit.encode_unspaced("egg and toast"),
+    dictionary
 )
 
 print(result.text)
 ```
 
-Once configured, the dictionary does not need to be supplied to every call.
+Once compiled, the `MorseDictionary` instance is optimized for fast trie lookups.
 
 ## Parsing Morse
 
@@ -242,18 +243,18 @@ Use `parse()` when the Morse contains boundaries:
 ```python
 from morse import Morse
 
-morse = Morse()
+morse_toolkit = Morse()
 
-stream = morse.parse(".... . .-.. .-.. ---")
+stream = morse_toolkit.parse(".... . .-.. .-.. ---")
 
 for token in stream:
-	print(token)
+   print(token)
 ```
 
 For continuous Morse, use `parse_unspaced()`:
 
 ```python
-sequence = morse.parse_unspaced("......-...-..---")
+sequence = morse_toolkit.parse_unspaced("......-...-..---")
 ```
 
 The two parsers serve different purposes:
