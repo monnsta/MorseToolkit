@@ -24,6 +24,12 @@ cli = [
 	"wordfreq>=3.1",
 ]
 
+dev = [
+	"morse[cli]",
+	"pytest",
+]
+
+
 [project.scripts]
 morse = "morse.cli:main"
 
