@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 
 from morse.solving.dictionary import MorseDictionary
 
@@ -201,3 +201,73 @@ class BigramScorer(MorseScorer):
 	def context_size(self) -> int:
 		"""Context size for BigramScorer is 1."""
 		return 1
+
+
+class CallableFrequencyScorer(MorseScorer):
+	"""Scores words using a caller-provided scoring function."""
+
+	def __init__(
+		self,
+		frequency: Callable[[str], float],
+	) -> None:
+		"""Initializes the callable frequency scorer.
+
+		Args:
+			frequency: A callable returning a float frequency score for a given word.
+		"""
+		self._frequency = frequency
+
+	def score(
+		self,
+		word: str,
+		context: tuple[str, ...] = (),
+	) -> float:
+		"""Evaluates the candidate word via the frequency callback.
+
+		Args:
+			word: The target word to score.
+			context: Ignored by this scorer.
+
+		Returns:
+			The computed frequency score returned by the provider.
+		"""
+		_ = context
+
+		return self._frequency(
+			word.strip().lower()
+		)
+
+	@property
+	def context_size(self) -> int:
+		"""Context size for CallableFrequencyScorer is 0."""
+		return 0
+
+
+class EnglishFrequencyScorer(CallableFrequencyScorer):
+	"""Scores English words using the optional `wordfreq` corpus.
+
+	Zipf frequency is logarithmic. A Zipf value minus 9 is an additive
+	log-probability-like score, meaning that multiple words naturally pay
+	the probability cost of being separate words.
+	"""
+
+	def __init__(self) -> None:
+		"""Initializes the English frequency scorer using wordfreq.
+
+		Raises:
+			ImportError: If the optional 'wordfreq' dependency is not installed.
+		"""
+		try:
+			from wordfreq import zipf_frequency
+		except ImportError as exc:
+			raise ImportError(
+				"EnglishFrequencyScorer requires the optional "
+				"'wordfreq' package. Install it with "
+				"'pip install wordfreq'."
+			) from exc
+
+		super().__init__(
+			frequency=lambda word: (
+				zipf_frequency(word, "en") - 9.0
+			),
+		)

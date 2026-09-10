@@ -19,6 +19,8 @@ __all__ = (
 	'DictionaryScorer',
 	'FrequencyScorer',
 	'BigramScorer',
+	'CallableFrequencyScorer',
+	'EnglishFrequencyScorer',
 	'MorseSegmenter',
 	'MorseSolver',
 )

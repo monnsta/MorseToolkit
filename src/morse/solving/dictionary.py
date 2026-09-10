@@ -2,30 +2,21 @@ from collections.abc import Iterable, Iterator
 
 
 class MorseDictionary:
-	"""A standardized dictionary for validating words and prefixes during solving."""
+	"""Normalized word dictionary used by Morse solving and scoring."""
 
-	def __init__(
-		self,
-		words: Iterable[str],
-	) -> None:
+	def __init__(self, words: Iterable[str]) -> None:
 		"""Initializes the dictionary with a collection of valid words.
 
 		Args:
 			words: An iterable of strings to populate the dictionary.
 		"""
 		self._words: set[str] = set()
-		self._prefixes: set[str] = {""}
+		self._prefixes: set[str] | None = None
 
 		for word in words:
 			normalized = self._normalize(word)
-
-			if not normalized:
-				continue
-
-			self._words.add(normalized)
-
-			for length in range(1, len(normalized) + 1):
-				self._prefixes.add(normalized[:length])
+			if normalized:
+				self._words.add(normalized)
 
 	def _normalize(self, word: str) -> str:
 		"""Normalizes a string for storage and comparison.
@@ -58,7 +49,25 @@ class MorseDictionary:
 		Returns:
 			True if the prefix exists, False otherwise.
 		"""
-		return self._normalize(prefix) in self._prefixes
+		prefix = self._normalize(prefix)
+
+		if self._prefixes is None:
+			self._build_prefixes()
+
+		if self._prefixes is None:
+			return False
+
+		return prefix in self._prefixes
+
+	def _build_prefixes(self) -> None:
+		"""Lazily builds the set of all valid word prefixes."""
+		prefixes = {""}
+
+		for word in self._words:
+			for length in range(1, len(word) + 1):
+				prefixes.add(word[:length])
+
+		self._prefixes = prefixes
 
 	def words(self) -> Iterator[str]:
 		"""Returns an iterator over all normalized words in the dictionary.

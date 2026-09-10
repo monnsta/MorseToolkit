@@ -62,6 +62,10 @@ class Morse:
 			                Defaults to standard '.' and '-'.
 			boundaries: Character and word boundary syntax.
 			            Defaults to one space between characters and three between words.
+			dictionary: Dictionary or word iterable used for solving unspaced Morse.
+			scorer: Scorer strategy used for candidate evaluation.
+			max_word_length: Upper limit on dictionary word length.
+			beam_width: Maximum search state beam width for contextual solving.
 		"""
 		self.alphabet = alphabet or InternationalMorse()
 		self.representation = representation or TextRepresentation()
@@ -103,7 +107,7 @@ class Morse:
 	def encode_unspaced(self, text: str) -> str:
 		"""Encodes text into continuous Morse without boundaries.
 
-		This is useful for producing input suitable for `solve()`.
+		This is useful for producing input suitable for ``solve()``.
 
 		Args:
 			text: Text to encode.
@@ -231,6 +235,74 @@ class Morse:
 		)
 
 		return solver.solve(sequence)
+
+	def solve_candidates(
+		self,
+		value: str,
+		dictionary: MorseDictionary | Iterable[str] | None = None,
+		scorer: MorseScorer | None = None,
+		max_word_length: int | None = None,
+		beam_width: int | None = None,
+		limit: int = 10,
+	) -> list[MorseCandidate]:
+		"""Returns ranked candidates for an unspaced Morse sequence.
+
+		Args:
+			value: Continuous Morse representation.
+			dictionary: Dictionary or iterable of English words.
+			scorer: Optional scoring strategy.
+			        Defaults to DictionaryScorer.
+			max_word_length: Maximum dictionary word length.
+			beam_width: Beam width for contextual scorers.
+			limit: Maximum number of ranked candidates to return.
+
+		Returns:
+			A list of ranked MorseCandidate objects, up to ``limit``.
+
+		Raises:
+			ValueError: If no dictionary is provided or candidate limit is < 1.
+		"""
+		sequence = self.parse_unspaced(value)
+
+		active_dictionary = dictionary or self.word_dictionary
+
+		if active_dictionary is None:
+			raise ValueError(
+				"A dictionary is required to solve unspaced Morse"
+			)
+
+		if not isinstance(active_dictionary, MorseDictionary):
+			active_dictionary = MorseDictionary(
+				active_dictionary
+			)
+
+		active_scorer = scorer or self.scorer
+
+		if active_scorer is None:
+			active_scorer = DictionaryScorer(
+				active_dictionary
+			)
+
+		solver = MorseSolver(
+			self.alphabet,
+			active_dictionary,
+			active_scorer,
+			max_word_length=(
+				max_word_length
+				if max_word_length is not None
+				else self.max_word_length
+			),
+			beam_width=(
+				beam_width
+				if beam_width is not None
+				else self.beam_width
+			),
+		)
+
+		return solver.solve_candidates(
+			sequence,
+			limit=limit,
+		)
 
 	def dictionary(
 		self,

@@ -12,6 +12,7 @@ class TokenType(Enum):
 		CHARACTER_BOUNDARY: A separator between characters.
 		WORD_BOUNDARY: A separator between words.
 	"""
+
 	VALUE = auto()
 	CHARACTER_BOUNDARY = auto()
 	WORD_BOUNDARY = auto()
@@ -25,12 +26,23 @@ class RawToken:
 		type: The categorization of the raw token.
 		value: The string chunk extracted from the input.
 	"""
+
 	type: TokenType
 	value: str
 
 
 class MorseTokenizer:
-	"""Splits string input into raw boundary and value tokens."""
+	"""Splits string input into raw boundary and value tokens.
+
+	Word boundaries take precedence over character boundaries. A character
+	boundary immediately adjacent to a word boundary is treated as redundant
+	and is not emitted as a separate token.
+
+	This allows independent word boundary syntax such as ``"/"`` to be used
+	naturally with whitespace character boundaries. For example, both
+	``"... --- / ..."`` and ``"... ---/ ..."`` represent the same boundary
+	structure when ``"/"`` is configured as the word boundary.
+	"""
 
 	def __init__(
 		self,
@@ -44,7 +56,11 @@ class MorseTokenizer:
 		self.boundaries = boundaries or MorseBoundarySyntax()
 
 	def tokenize(self, value: str) -> tuple[RawToken, ...]:
-		"""Scans a string and segments it into raw tokens based on boundaries.
+		"""Scans a string and segments it into raw tokens.
+
+		Word boundaries are recognized before character boundaries. Character
+		boundaries directly adjacent to a word boundary are omitted because
+		the word boundary already separates the surrounding words.
 
 		Args:
 			value: The input string to scan.
@@ -60,13 +76,29 @@ class MorseTokenizer:
 				self.boundaries.word_boundary,
 				position,
 			):
+				if (
+					tokens
+					and tokens[-1].type is TokenType.CHARACTER_BOUNDARY
+				):
+					tokens.pop()
+
 				tokens.append(
 					RawToken(
 						type=TokenType.WORD_BOUNDARY,
 						value=self.boundaries.word_boundary,
 					)
 				)
+
 				position += len(self.boundaries.word_boundary)
+
+				if value.startswith(
+					self.boundaries.character_boundary,
+					position,
+				):
+					position += len(
+						self.boundaries.character_boundary
+					)
+
 				continue
 
 			if value.startswith(

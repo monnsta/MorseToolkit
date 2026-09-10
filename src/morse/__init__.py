@@ -31,7 +31,7 @@ def encode(text: str) -> str:
 def encode_unspaced(text: str) -> str:
 	"""Encodes text into continuous Morse without boundaries.
 
-	This is useful for producing input suitable for `solve()`.
+	This is useful for producing input suitable for ``solve()``.
 
 	Args:
 		text: Text to encode.

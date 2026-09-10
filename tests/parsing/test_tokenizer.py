@@ -71,9 +71,7 @@ def test_tokenize_custom_word_boundary() -> None:
 		TokenType.VALUE,
 		TokenType.CHARACTER_BOUNDARY,
 		TokenType.VALUE,
-		TokenType.CHARACTER_BOUNDARY,
 		TokenType.WORD_BOUNDARY,
-		TokenType.CHARACTER_BOUNDARY,
 		TokenType.VALUE,
 	]
 
@@ -125,3 +123,79 @@ def test_tokenize_preserves_value_tokens() -> None:
 	assert len(tokens) == 1
 	assert tokens[0].type is TokenType.VALUE
 	assert tokens[0].value == "...---..."
+
+
+def test_word_boundary_supersedes_preceding_character_boundary() -> None:
+	boundaries = MorseBoundarySyntax(
+		character_boundary=" ",
+		word_boundary="/",
+	)
+
+	tokenizer = MorseTokenizer(boundaries)
+
+	tokens = tokenizer.tokenize("... --- / ...")
+
+	assert [token.type for token in tokens] == [
+		TokenType.VALUE,
+		TokenType.CHARACTER_BOUNDARY,
+		TokenType.VALUE,
+		TokenType.WORD_BOUNDARY,
+		TokenType.VALUE,
+	]
+
+
+def test_word_boundary_supersedes_following_character_boundary() -> None:
+	boundaries = MorseBoundarySyntax(
+		character_boundary=" ",
+		word_boundary="/",
+	)
+
+	tokenizer = MorseTokenizer(boundaries)
+
+	tokens = tokenizer.tokenize("... ---/ ...")
+
+	assert [token.type for token in tokens] == [
+		TokenType.VALUE,
+		TokenType.CHARACTER_BOUNDARY,
+		TokenType.VALUE,
+		TokenType.WORD_BOUNDARY,
+		TokenType.VALUE,
+	]
+
+
+def test_word_boundary_with_character_boundaries_on_both_sides() -> None:
+	boundaries = MorseBoundarySyntax(
+		character_boundary=" ",
+		word_boundary="/",
+	)
+
+	tokenizer = MorseTokenizer(boundaries)
+
+	tokens = tokenizer.tokenize("... --- / ...")
+
+	assert [token.type for token in tokens] == [
+		TokenType.VALUE,
+		TokenType.CHARACTER_BOUNDARY,
+		TokenType.VALUE,
+		TokenType.WORD_BOUNDARY,
+		TokenType.VALUE,
+	]
+
+
+def test_word_boundary_without_surrounding_character_boundaries() -> None:
+	boundaries = MorseBoundarySyntax(
+		character_boundary=" ",
+		word_boundary="/",
+	)
+
+	tokenizer = MorseTokenizer(boundaries)
+
+	tokens = tokenizer.tokenize("... ---/...")
+
+	assert [token.type for token in tokens] == [
+		TokenType.VALUE,
+		TokenType.CHARACTER_BOUNDARY,
+		TokenType.VALUE,
+		TokenType.WORD_BOUNDARY,
+		TokenType.VALUE,
+	]
