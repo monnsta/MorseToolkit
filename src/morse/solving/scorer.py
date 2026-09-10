@@ -244,7 +244,7 @@ class CallableFrequencyScorer(MorseScorer):
 
 
 class EnglishFrequencyScorer(CallableFrequencyScorer):
-	"""Scores English words using the optional `wordfreq` corpus.
+	"""Scores English words using the optional ``wordfreq`` corpus.
 
 	Zipf frequency is logarithmic. A Zipf value minus 9 is an additive
 	log-probability-like score, meaning that multiple words naturally pay
