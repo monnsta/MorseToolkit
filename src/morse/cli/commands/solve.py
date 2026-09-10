@@ -7,6 +7,8 @@ from pathlib import Path
 import typer
 
 from morse import Morse
+from morse.cli.commands._input import resolve_input
+from morse.solving import EnglishFrequencyScorer
 
 
 def solve_command(
@@ -37,16 +39,17 @@ def solve_command(
 		min=1,
 		help="Solver beam width.",
 	),
+	limit: int = typer.Option(
+		5,
+		"--limit",
+		"-n",
+		min=1,
+		help="Number of candidate interpretations to show.",
+	),
 ) -> None:
 	"""Solve continuous Morse by inferring character boundaries."""
 	try:
-		if value is None:
-			import sys
-			if sys.stdin.isatty():
-				raise ValueError(
-					"No Morse input supplied. Pass a value or pipe Morse through stdin."
-				)
-			value = sys.stdin.read().rstrip("\n")
+		text = resolve_input(value)
 
 		words = (
 			line.strip()
@@ -54,18 +57,31 @@ def solve_command(
 			if line.strip()
 		)
 
-		result = Morse().solve(
-			value,
-			dictionary=words,
+		toolkit = Morse()
+		morse_dict = toolkit.dictionary(words)
+
+		try:
+			scorer = EnglishFrequencyScorer()
+		except ImportError as exc:
+			raise typer.BadParameter(str(exc)) from exc
+
+		results = toolkit.solve_candidates(
+			text,
+			dictionary=morse_dict,
+			scorer=scorer,
 			max_word_length=max_word_length,
 			beam_width=beam_width,
+			limit=limit,
 		)
 
-		if result is None:
+		if not results:
 			typer.echo("No solution found.", err=True)
 			raise typer.Exit(code=1)
 
+		for index, result in enumerate(results, 1):
+			typer.echo(f"{index}. {result.text}")
+
+	except typer.Exit:
+		raise
 	except (ValueError, TypeError, OSError) as exc:
 		raise typer.BadParameter(str(exc)) from exc
-
-	typer.echo(result.text)

@@ -23,7 +23,12 @@ app = typer.Typer(
 
 app.command("encode")(encode_command)
 app.command("decode")(decode_command)
-app.command("solve")(solve_command)
+app.command(
+	"solve",
+	context_settings={
+		"ignore_unknown_options": True,
+	},
+)(solve_command)
 app.command("parse")(parse_command)
 app.command("validate")(validate_command)
 

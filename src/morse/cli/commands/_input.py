@@ -7,11 +7,13 @@ import sys
 
 def resolve_input(value: str | None) -> str:
 	"""Return explicit input or consume stdin when it is being piped."""
-	if value is not None:
+	if value:
 		return value
 
 	if not sys.stdin.isatty():
-		return sys.stdin.read().rstrip("\n")
+		input_data = sys.stdin.read().rstrip("\n")
+		if input_data:
+			return input_data
 
 	raise ValueError("No input supplied. Pass a value or pipe text through stdin.")
 

@@ -10,20 +10,46 @@ from rich.console import Console
 from rich.panel import Panel
 
 from morse import Morse
+from morse.parsing import MorseBoundarySyntax
 
-from morse.cli.interactive.completer import MorseCompleter
 from morse.cli.interactive.commands import InteractiveCommandRunner
+from morse.cli.interactive.completer import MorseCompleter
+from morse.cli.interactive.config import InteractiveConfig
 from morse.cli.interactive.history import history_path
 
 
 class InteractiveShell:
+	"""Runs the persistent interactive MorseToolkit environment."""
+
 	def __init__(self, morse: Morse | None = None) -> None:
-		self.morse = morse or Morse()
+		"""Initializes the interactive shell.
+
+		Args:
+			morse: Optional preconfigured Morse instance. When omitted,
+				persistent interactive configuration is loaded automatically.
+		"""
 		self.console = Console()
-		self.runner = InteractiveCommandRunner(self.morse, self.console)
+		self.config = InteractiveConfig.load()
+
+		if morse is None:
+			morse = self._create_morse()
+
+		self.morse = morse
+		self.runner = InteractiveCommandRunner(
+			self.morse,
+			self.console,
+			self.config,
+		)
+
+		history = None
+
+		if self.config.history_enabled:
+			history = FileHistory(
+				str(history_path())
+			)
 
 		self.session = PromptSession(
-			history=FileHistory(str(history_path())),
+			history=history,
 			completer=MorseCompleter(),
 			complete_while_typing=True,
 			multiline=False,
@@ -35,24 +61,47 @@ class InteractiveShell:
 			),
 		)
 
+	def _create_morse(self) -> Morse:
+		"""Creates a Morse instance from persistent interactive settings.
+
+		Returns:
+			A configured Morse instance.
+		"""
+		boundaries = MorseBoundarySyntax(
+			character_boundary=self.config.character_boundary,
+			word_boundary=self.config.word_boundary,
+		)
+
+		return Morse(
+			boundaries=boundaries,
+			max_word_length=self.config.max_word_length,
+			beam_width=self.config.beam_width,
+		)
+
 	def _key_bindings(self) -> KeyBindings:
+		"""Creates the interactive keyboard bindings.
+
+		Returns:
+			Configured prompt-toolkit key bindings.
+		"""
 		bindings = KeyBindings()
 
 		@bindings.add("c-l")
-		def clear(event) -> None:
+		def _(event) -> None:
 			event.app.renderer.clear()
 
 		@bindings.add("c-c")
-		def cancel(event) -> None:
+		def _(event) -> None:
 			event.app.current_buffer.reset()
 
 		@bindings.add("c-d")
-		def exit_shell(event) -> None:
+		def _(event) -> None:
 			event.app.exit(exception=EOFError)
 
 		return bindings
 
 	def run(self) -> None:
+		"""Runs the interactive shell until the user exits."""
 		self.console.print(
 			Panel.fit(
 				"[bold]MorseToolkit[/bold]\n"
