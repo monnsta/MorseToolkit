@@ -76,10 +76,7 @@ class MorseTokenizer:
 				self.boundaries.word_boundary,
 				position,
 			):
-				if (
-					tokens
-					and tokens[-1].type is TokenType.CHARACTER_BOUNDARY
-				):
+				if tokens and tokens[-1].type is TokenType.CHARACTER_BOUNDARY:
 					tokens.pop()
 
 				tokens.append(
@@ -95,9 +92,7 @@ class MorseTokenizer:
 					self.boundaries.character_boundary,
 					position,
 				):
-					position += len(
-						self.boundaries.character_boundary
-					)
+					position += len(self.boundaries.character_boundary)
 
 				continue
 

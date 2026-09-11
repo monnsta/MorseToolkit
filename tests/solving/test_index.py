@@ -7,20 +7,13 @@ def encode_word(word: str) -> tuple:
 	symbols = []
 
 	for character in word:
-		symbols.extend(
-			alphabet.encode(character)
-		)
+		symbols.extend(alphabet.encode(character))
 
 	return tuple(symbols)
 
 
 def make_index(words: list[str]) -> MorseWordIndex:
-	return MorseWordIndex(
-		(
-			(word, encode_word(word))
-			for word in words
-		)
-	)
+	return MorseWordIndex(((word, encode_word(word)) for word in words))
 
 
 def test_index_finds_word() -> None:
@@ -40,10 +33,12 @@ def test_index_finds_word() -> None:
 
 
 def test_index_finds_multiple_words() -> None:
-	index = make_index([
-		"hello",
-		"hell",
-	])
+	index = make_index(
+		[
+			"hello",
+			"hell",
+		]
+	)
 
 	sequence = encode_word("hello")
 
@@ -55,10 +50,7 @@ def test_index_finds_multiple_words() -> None:
 		)
 	)
 
-	assert {
-		(match.word, match.end)
-		for match in matches
-	} == {
+	assert {(match.word, match.end) for match in matches} == {
 		("hell", len(encode_word("hell"))),
 		("hello", len(encode_word("hello"))),
 	}
@@ -109,7 +101,4 @@ def test_index_supports_matching_from_middle() -> None:
 		)
 	)
 
-	assert any(
-		match.word == "hello"
-		for match in matches
-	)
+	assert any(match.word == "hello" for match in matches)

@@ -16,10 +16,15 @@ def test_encode_letter() -> None:
 def test_decode_letter() -> None:
 	alphabet = InternationalMorse()
 
-	assert alphabet.decode((
-		MorseSymbol.DOT,
-		MorseSymbol.DASH,
-	)) == "A"
+	assert (
+		alphabet.decode(
+			(
+				MorseSymbol.DOT,
+				MorseSymbol.DASH,
+			)
+		)
+		== "A"
+	)
 
 
 def test_encode_is_case_insensitive() -> None:
@@ -39,20 +44,24 @@ def test_can_encode() -> None:
 def test_can_decode() -> None:
 	alphabet = InternationalMorse()
 
-	assert alphabet.can_decode((
-		MorseSymbol.DOT,
-		MorseSymbol.DASH,
-	))
+	assert alphabet.can_decode(
+		(
+			MorseSymbol.DOT,
+			MorseSymbol.DASH,
+		)
+	)
 
-	assert not alphabet.can_decode((
-		MorseSymbol.DOT,
-		MorseSymbol.DOT,
-		MorseSymbol.DOT,
-		MorseSymbol.DOT,
-		MorseSymbol.DOT,
-		MorseSymbol.DOT,
-		MorseSymbol.DOT,
-	))
+	assert not alphabet.can_decode(
+		(
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+		)
+	)
 
 
 def test_decode_rejects_unknown_sequence() -> None:
@@ -62,12 +71,14 @@ def test_decode_rejects_unknown_sequence() -> None:
 		ValueError,
 		match="Unsupported Morse sequence",
 	):
-		alphabet.decode((
-			MorseSymbol.DOT,
-			MorseSymbol.DOT,
-			MorseSymbol.DOT,
-			MorseSymbol.DOT,
-			MorseSymbol.DOT,
-			MorseSymbol.DOT,
-			MorseSymbol.DOT,
-		))
+		alphabet.decode(
+			(
+				MorseSymbol.DOT,
+				MorseSymbol.DOT,
+				MorseSymbol.DOT,
+				MorseSymbol.DOT,
+				MorseSymbol.DOT,
+				MorseSymbol.DOT,
+				MorseSymbol.DOT,
+			)
+		)

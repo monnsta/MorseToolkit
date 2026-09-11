@@ -38,17 +38,13 @@ An alphabet provides four operations:
 
 ```python
 class MorseAlphabet(ABC):
-	def encode(self, character: str) -> tuple[MorseSymbol, ...]:
-		...
+	def encode(self, character: str) -> tuple[MorseSymbol, ...]: ...
 
-	def decode(self, symbols: Sequence[MorseSymbol]) -> str:
-		...
+	def decode(self, symbols: Sequence[MorseSymbol]) -> str: ...
 
-	def can_encode(self, character: str) -> bool:
-		...
+	def can_encode(self, character: str) -> bool: ...
 
-	def can_decode(self, symbols: Sequence[MorseSymbol]) -> bool:
-		...
+	def can_decode(self, symbols: Sequence[MorseSymbol]) -> bool: ...
 ```
 
 ### Encoding
@@ -83,10 +79,12 @@ from morse.alphabets import InternationalMorse
 
 alphabet = InternationalMorse()
 
-character = alphabet.decode((
-	MorseSymbol.DOT,
-	MorseSymbol.DASH,
-))
+character = alphabet.decode(
+	(
+		MorseSymbol.DOT,
+		MorseSymbol.DASH,
+	)
+)
 
 print(character)
 # "A"
@@ -219,15 +217,17 @@ alphabet.encode("^")
 Likewise, decoding an unknown Morse sequence raises `ValueError`:
 
 ```python
-alphabet.decode((
-	MorseSymbol.DOT,
-	MorseSymbol.DOT,
-	MorseSymbol.DOT,
-	MorseSymbol.DOT,
-	MorseSymbol.DOT,
-	MorseSymbol.DOT,
-	MorseSymbol.DOT,
-))
+alphabet.decode(
+	(
+		MorseSymbol.DOT,
+		MorseSymbol.DOT,
+		MorseSymbol.DOT,
+		MorseSymbol.DOT,
+		MorseSymbol.DOT,
+		MorseSymbol.DOT,
+		MorseSymbol.DOT,
+	)
+)
 # ValueError: Unsupported Morse sequence: '.......'
 ```
 
@@ -303,17 +303,13 @@ from morse.core import MorseAlphabet, MorseSymbol
 
 
 class MyAlphabet(MorseAlphabet):
-	def encode(self, character: str) -> tuple[MorseSymbol, ...]:
-		...
+	def encode(self, character: str) -> tuple[MorseSymbol, ...]: ...
 
-	def decode(self, symbols: Sequence[MorseSymbol]) -> str:
-		...
+	def decode(self, symbols: Sequence[MorseSymbol]) -> str: ...
 
-	def can_encode(self, character: str) -> bool:
-		...
+	def can_encode(self, character: str) -> bool: ...
 
-	def can_decode(self, symbols: Sequence[MorseSymbol]) -> bool:
-		...
+	def can_decode(self, symbols: Sequence[MorseSymbol]) -> bool: ...
 ```
 
 The four methods form the complete alphabet contract.

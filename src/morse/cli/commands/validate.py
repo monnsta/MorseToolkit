@@ -31,7 +31,11 @@ def validate_command(
 			morse.parse(text)
 
 	except (ValueError, TypeError) as exc:
-		typer.echo(f"Invalid Morse: {exc}" if "No input supplied" not in str(exc) else str(exc))
+		typer.echo(
+			f"Invalid Morse: {exc}"
+			if "No input supplied" not in str(exc)
+			else str(exc)
+		)
 		raise typer.Exit(code=1) from exc
 
 	typer.echo("Valid Morse.")

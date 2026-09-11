@@ -26,9 +26,7 @@ class MorseSegmenter:
 			ValueError: If max_character_length is less than 1.
 		"""
 		if max_character_length < 1:
-			raise ValueError(
-				"Maximum character length must be at least 1"
-			)
+			raise ValueError("Maximum character length must be at least 1")
 
 		self.alphabet = alphabet
 		self.max_character_length = max_character_length

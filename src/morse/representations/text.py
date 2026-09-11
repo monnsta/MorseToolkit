@@ -35,9 +35,7 @@ class TextRepresentation(MorseRepresentation):
 		if value == "-":
 			return MorseSymbol.DASH
 
-		raise ValueError(
-			f"Invalid Morse representation: {value!r}"
-		)
+		raise ValueError(f"Invalid Morse representation: {value!r}")
 
 	def decode_sequence(self, value: str) -> tuple[MorseSymbol, ...]:
 		"""Decodes a continuous string of '.' and '-' characters into a tuple of MorseSymbols.
@@ -51,10 +49,7 @@ class TextRepresentation(MorseRepresentation):
 		Raises:
 			ValueError: If any character in the sequence is not '.' or '-'.
 		"""
-		return tuple(
-			self.decode(character)
-			for character in value
-		)
+		return tuple(self.decode(character) for character in value)
 
 	def can_decode(self, value: str) -> bool:
 		"""Checks if a string is a standard Morse character.

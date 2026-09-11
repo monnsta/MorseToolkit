@@ -59,9 +59,7 @@ class MorseWordIndex:
 			ValueError: If the symbol sequence is empty.
 		"""
 		if not symbols:
-			raise ValueError(
-				"Cannot index an empty Morse sequence"
-			)
+			raise ValueError("Cannot index an empty Morse sequence")
 
 		self.add_encoded(
 			word,
@@ -89,9 +87,7 @@ class MorseWordIndex:
 			ValueError: If the symbol length is less than 1.
 		"""
 		if symbol_length < 1:
-			raise ValueError(
-				"Morse symbol length must be at least 1"
-			)
+			raise ValueError("Morse symbol length must be at least 1")
 
 		words = self._words.get(key)
 

@@ -15,7 +15,9 @@ def resolve_input(value: str | None) -> str:
 		if input_data:
 			return input_data
 
-	raise ValueError("No input supplied. Pass a value or pipe text through stdin.")
+	raise ValueError(
+		"No input supplied. Pass a value or pipe text through stdin."
+	)
 
 
 def fail(message: str) -> None:

@@ -10,9 +10,7 @@ def test_encode() -> None:
 
 
 def test_decode() -> None:
-	assert morse.decode(
-		".... . .-.. .-.. ---"
-	) == "HELLO"
+	assert morse.decode(".... . .-.. .-.. ---") == "HELLO"
 
 
 def test_round_trip() -> None:
@@ -29,10 +27,12 @@ def test_encode_unspaced() -> None:
 
 
 def test_custom_representation() -> None:
-	representation = ArbitraryRepresentation({
-		MorseSymbol.DOT: "e",
-		MorseSymbol.DASH: "r",
-	})
+	representation = ArbitraryRepresentation(
+		{
+			MorseSymbol.DOT: "e",
+			MorseSymbol.DASH: "r",
+		}
+	)
 
 	morse_toolkit = Morse(
 		representation=representation,
@@ -43,10 +43,12 @@ def test_custom_representation() -> None:
 
 
 def test_custom_representation_round_trip() -> None:
-	representation = ArbitraryRepresentation({
-		MorseSymbol.DOT: "e",
-		MorseSymbol.DASH: "r",
-	})
+	representation = ArbitraryRepresentation(
+		{
+			MorseSymbol.DOT: "e",
+			MorseSymbol.DASH: "r",
+		}
+	)
 
 	morse_toolkit = Morse(
 		representation=representation,
@@ -83,10 +85,12 @@ def test_solve_multiple_words() -> None:
 def test_configured_dictionary() -> None:
 	toolkit = Morse()
 
-	dictionary = toolkit.dictionary([
-		"hello",
-		"world",
-	])
+	dictionary = toolkit.dictionary(
+		[
+			"hello",
+			"world",
+		]
+	)
 
 	result = toolkit.solve(
 		toolkit.encode_unspaced("hello world"),

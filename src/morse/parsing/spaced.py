@@ -43,29 +43,18 @@ class SpacedParser(MorseParser[MorseStream]):
 
 		for raw_token in raw_tokens:
 			if raw_token.type is TokenType.CHARACTER_BOUNDARY:
-				tokens.append(
-					MorseToken.character_boundary()
-				)
+				tokens.append(MorseToken.character_boundary())
 				continue
 
 			if raw_token.type is TokenType.WORD_BOUNDARY:
-				tokens.append(
-					MorseToken.word_boundary()
-				)
+				tokens.append(MorseToken.word_boundary())
 				continue
 
 			if raw_token.type is not TokenType.VALUE:
-				raise ValueError(
-					f"Unknown raw token type: {raw_token.type!r}"
-				)
+				raise ValueError(f"Unknown raw token type: {raw_token.type!r}")
 
-			symbols = self.representation.decode_sequence(
-				raw_token.value
-			)
+			symbols = self.representation.decode_sequence(raw_token.value)
 
-			tokens.extend(
-				MorseToken.symbol_token(symbol)
-				for symbol in symbols
-			)
+			tokens.extend(MorseToken.symbol_token(symbol) for symbol in symbols)
 
 		return MorseStream.from_tokens(iter(tokens))

@@ -125,14 +125,9 @@ class Morse:
 			if character == " ":
 				continue
 
-			symbols.extend(
-				self.alphabet.encode(character)
-			)
+			symbols.extend(self.alphabet.encode(character))
 
-		return "".join(
-			self.representation.encode(symbol)
-			for symbol in symbols
-		)
+		return "".join(self.representation.encode(symbol) for symbol in symbols)
 
 	def decode(self, value: str) -> str:
 		"""Decodes boundary-delimited Morse code.
@@ -204,9 +199,7 @@ class Morse:
 		active_dictionary = dictionary or self.word_dictionary
 
 		if active_dictionary is None:
-			raise ValueError(
-				"A dictionary is required to solve unspaced Morse"
-			)
+			raise ValueError("A dictionary is required to solve unspaced Morse")
 
 		if not isinstance(active_dictionary, MorseDictionary):
 			active_dictionary = MorseDictionary(active_dictionary)
@@ -214,9 +207,7 @@ class Morse:
 		active_scorer = scorer or self.scorer
 
 		if active_scorer is None:
-			active_scorer = DictionaryScorer(
-				active_dictionary
-			)
+			active_scorer = DictionaryScorer(active_dictionary)
 
 		solver = MorseSolver(
 			self.alphabet,
@@ -228,9 +219,7 @@ class Morse:
 				else self.max_word_length
 			),
 			beam_width=(
-				beam_width
-				if beam_width is not None
-				else self.beam_width
+				beam_width if beam_width is not None else self.beam_width
 			),
 		)
 
@@ -267,21 +256,15 @@ class Morse:
 		active_dictionary = dictionary or self.word_dictionary
 
 		if active_dictionary is None:
-			raise ValueError(
-				"A dictionary is required to solve unspaced Morse"
-			)
+			raise ValueError("A dictionary is required to solve unspaced Morse")
 
 		if not isinstance(active_dictionary, MorseDictionary):
-			active_dictionary = MorseDictionary(
-				active_dictionary
-			)
+			active_dictionary = MorseDictionary(active_dictionary)
 
 		active_scorer = scorer or self.scorer
 
 		if active_scorer is None:
-			active_scorer = DictionaryScorer(
-				active_dictionary
-			)
+			active_scorer = DictionaryScorer(active_dictionary)
 
 		solver = MorseSolver(
 			self.alphabet,
@@ -293,9 +276,7 @@ class Morse:
 				else self.max_word_length
 			),
 			beam_width=(
-				beam_width
-				if beam_width is not None
-				else self.beam_width
+				beam_width if beam_width is not None else self.beam_width
 			),
 		)
 
@@ -343,29 +324,19 @@ class Morse:
 		for token in stream:
 			if token.type is MorseTokenType.SYMBOL:
 				if token.symbol is None:
-					raise ValueError(
-						"Symbol token is missing a Morse symbol"
-					)
+					raise ValueError("Symbol token is missing a Morse symbol")
 
-				parts.append(
-					self.representation.encode(token.symbol)
-				)
+				parts.append(self.representation.encode(token.symbol))
 				continue
 
 			if token.type is MorseTokenType.CHARACTER_BOUNDARY:
-				parts.append(
-					self.boundaries.character_boundary
-				)
+				parts.append(self.boundaries.character_boundary)
 				continue
 
 			if token.type is MorseTokenType.WORD_BOUNDARY:
-				parts.append(
-					self.boundaries.word_boundary
-				)
+				parts.append(self.boundaries.word_boundary)
 				continue
 
-			raise ValueError(
-				f"Unknown Morse token type: {token.type!r}"
-			)
+			raise ValueError(f"Unknown Morse token type: {token.type!r}")
 
 		return "".join(parts)

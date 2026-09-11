@@ -112,9 +112,4 @@ class MorseSegmentation:
 		Returns:
 			A new instantiated MorseSegmentation instance.
 		"""
-		return cls(
-			tuple(
-				tuple(character)
-				for character in characters
-			)
-		)
+		return cls(tuple(tuple(character) for character in characters))

@@ -54,11 +54,13 @@ The dictionary determines which complete words are allowed.
 ```python
 from morse.solving import MorseDictionary
 
-dictionary = MorseDictionary([
-	"hello",
-	"world",
-	"python",
-])
+dictionary = MorseDictionary(
+	[
+		"hello",
+		"world",
+		"python",
+	]
+)
 ```
 
 Words are normalized when stored:
@@ -71,12 +73,14 @@ Words are normalized when stored:
 For example:
 
 ```python
-dictionary = MorseDictionary([
-	"Hello",
-	"  WORLD  ",
-	"hello",
-	"   ",
-])
+dictionary = MorseDictionary(
+	[
+		"Hello",
+		"  WORLD  ",
+		"hello",
+		"   ",
+	]
+)
 
 assert dictionary.contains("hello")
 assert dictionary.contains("HELLO")
@@ -106,10 +110,12 @@ Both checks are case-insensitive.
 The dictionary also stores prefixes of every word.
 
 ```python
-dictionary = MorseDictionary([
-	"hello",
-	"help",
-])
+dictionary = MorseDictionary(
+	[
+		"hello",
+		"help",
+	]
+)
 
 dictionary.has_prefix("h")
 # True
@@ -225,10 +231,12 @@ from morse.solving import (
 	DictionaryScorer,
 )
 
-dictionary = MorseDictionary([
-	"hello",
-	"world",
-])
+dictionary = MorseDictionary(
+	[
+		"hello",
+		"world",
+	]
+)
 
 scorer = DictionaryScorer(dictionary)
 
@@ -259,10 +267,12 @@ It is useful when every dictionary word should be treated equally.
 ```python
 from morse.solving import FrequencyScorer
 
-scorer = FrequencyScorer({
-	"hello": 10.0,
-	"world": 5.0,
-})
+scorer = FrequencyScorer(
+	{
+		"hello": 10.0,
+		"world": 5.0,
+	}
+)
 ```
 
 Higher values are preferred:
@@ -297,9 +307,11 @@ Frequency values and the default score cannot be negative.
 Word normalization is case-insensitive and strips surrounding whitespace.
 
 ```python
-scorer = FrequencyScorer({
-	"hello": 10.0,
-})
+scorer = FrequencyScorer(
+	{
+		"hello": 10.0,
+	}
+)
 
 scorer.score("HELLO")
 # 10.0
@@ -323,10 +335,12 @@ This allows the solver to express preferences between adjacent words without req
 ```python
 from morse.solving import BigramScorer
 
-scorer = BigramScorer({
-	("new", "york"): 10.0,
-	("new", "cat"): 1.0,
-})
+scorer = BigramScorer(
+	{
+		("new", "york"): 10.0,
+		("new", "cat"): 1.0,
+	}
+)
 ```
 
 The first word has no preceding word, so the scorer uses `default_score` for it.
@@ -395,10 +409,12 @@ from morse.solving import (
 	MorseSolver,
 )
 
-dictionary = MorseDictionary([
-	"hello",
-	"world",
-])
+dictionary = MorseDictionary(
+	[
+		"hello",
+		"world",
+	]
+)
 
 scorer = DictionaryScorer(dictionary)
 
@@ -590,7 +606,7 @@ The limit is based on the **text word's character count**, not its Morse symbol 
 For example, with:
 
 ```python
-max_word_length=3
+max_word_length = 3
 ```
 
 `"hello"` will not be considered because it contains five characters.
@@ -657,7 +673,6 @@ from morse.solving import MorseScorer
 
 
 class MyScorer(MorseScorer):
-
 	@property
 	def context_size(self) -> int:
 		return 0
@@ -706,10 +721,12 @@ from morse.api import Morse
 
 morse = Morse(
 	dictionary=["new", "york", "cat"],
-	scorer=BigramScorer({
-		("new", "york"): 10.0,
-		("new", "cat"): 1.0,
-	}),
+	scorer=BigramScorer(
+		{
+			("new", "york"): 10.0,
+			("new", "cat"): 1.0,
+		}
+	),
 )
 
 result = morse.solve(
@@ -738,17 +755,21 @@ This distinction allows the same dictionary to be paired with different scoring 
 For example:
 
 ```python
-dictionary = MorseDictionary([
-	"hello",
-	"world",
-])
+dictionary = MorseDictionary(
+	[
+		"hello",
+		"world",
+	]
+)
 
 dictionary_scorer = DictionaryScorer(dictionary)
 
-frequency_scorer = FrequencyScorer({
-	"hello": 10.0,
-	"world": 2.0,
-})
+frequency_scorer = FrequencyScorer(
+	{
+		"hello": 10.0,
+		"world": 2.0,
+	}
+)
 ```
 
 The first treats both words equally.

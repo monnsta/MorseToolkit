@@ -106,9 +106,9 @@ def solve(
 
 
 __all__ = (
-	'Morse',
-	'encode',
-	'encode_unspaced',
-	'decode',
-	'solve',
+	"Morse",
+	"encode",
+	"encode_unspaced",
+	"decode",
+	"solve",
 )

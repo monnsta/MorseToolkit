@@ -19,14 +19,7 @@ def dictionary_file(tmp_path: Path) -> Path:
 	"""Create a small deterministic Morse dictionary for solver tests."""
 	path = tmp_path / "dictionary.txt"
 	path.write_text(
-		"hello\n"
-		"there\n"
-		"help\n"
-		"her\n"
-		"hell\n"
-		"he\n"
-		"the\n"
-		"other\n",
+		"hello\nthere\nhelp\nher\nhell\nhe\nthe\nother\n",
 		encoding="utf-8",
 	)
 	return path

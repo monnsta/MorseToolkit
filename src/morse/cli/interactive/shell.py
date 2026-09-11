@@ -44,9 +44,7 @@ class InteractiveShell:
 		history = None
 
 		if self.config.history_enabled:
-			history = FileHistory(
-				str(history_path())
-			)
+			history = FileHistory(str(history_path()))
 
 		self.session = PromptSession(
 			history=history,
@@ -114,9 +112,7 @@ class InteractiveShell:
 
 		while True:
 			try:
-				line = self.session.prompt(
-					[("class:prompt", "morse> ")]
-				)
+				line = self.session.prompt([("class:prompt", "morse> ")])
 			except (EOFError, KeyboardInterrupt):
 				self.console.print()
 				break

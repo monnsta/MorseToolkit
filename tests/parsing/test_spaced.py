@@ -1,14 +1,8 @@
 from morse.core import MorseSymbol, MorseTokenType
 from morse.encoding import MorseDecoder
 from morse.alphabets import InternationalMorse
-from morse.parsing import (
-	MorseBoundarySyntax,
-	SpacedParser
-)
-from morse.representations import (
-	TextRepresentation,
-	ArbitraryRepresentation
-)
+from morse.parsing import MorseBoundarySyntax, SpacedParser
+from morse.representations import TextRepresentation, ArbitraryRepresentation
 
 
 def test_parse_spaced_morse() -> None:
@@ -40,14 +34,9 @@ def test_parse_custom_word_boundary() -> None:
 		),
 	)
 
-	stream = parser.parse(
-		".... . .-.. .-.. --- / .-- --- .-. .-.. -.."
-	)
+	stream = parser.parse(".... . .-.. .-.. --- / .-- --- .-. .-.. -..")
 
-	assert any(
-		token.type is MorseTokenType.WORD_BOUNDARY
-		for token in stream
-	)
+	assert any(token.type is MorseTokenType.WORD_BOUNDARY for token in stream)
 
 
 def test_parse_custom_character_and_word_boundaries() -> None:
@@ -59,19 +48,16 @@ def test_parse_custom_character_and_word_boundaries() -> None:
 		),
 	)
 
-	stream = parser.parse(
-		"....|.|.-..|.-..|---||.--|---|.-.|.-..|-.."
+	stream = parser.parse("....|.|.-..|.-..|---||.--|---|.-.|.-..|-..")
+
+	assert (
+		sum(token.type is MorseTokenType.CHARACTER_BOUNDARY for token in stream)
+		== 8
 	)
 
-	assert sum(
-		token.type is MorseTokenType.CHARACTER_BOUNDARY
-		for token in stream
-	) == 8
-
-	assert sum(
-		token.type is MorseTokenType.WORD_BOUNDARY
-		for token in stream
-	) == 1
+	assert (
+		sum(token.type is MorseTokenType.WORD_BOUNDARY for token in stream) == 1
+	)
 
 
 def test_parse_symbols_without_boundaries() -> None:
@@ -80,10 +66,7 @@ def test_parse_symbols_without_boundaries() -> None:
 	stream = parser.parse("...")
 
 	assert len(stream) == 3
-	assert all(
-		token.type is MorseTokenType.SYMBOL
-		for token in stream
-	)
+	assert all(token.type is MorseTokenType.SYMBOL for token in stream)
 
 
 def test_parse_empty_value() -> None:
@@ -95,10 +78,12 @@ def test_parse_empty_value() -> None:
 
 
 def test_parse_multi_character_representation() -> None:
-	representation = ArbitraryRepresentation({
-		MorseSymbol.DOT: "dot",
-		MorseSymbol.DASH: "dash",
-	})
+	representation = ArbitraryRepresentation(
+		{
+			MorseSymbol.DOT: "dot",
+			MorseSymbol.DASH: "dash",
+		}
+	)
 
 	parser = SpacedParser(representation)
 
@@ -118,16 +103,16 @@ def test_parse_multi_character_representation() -> None:
 
 
 def test_parse_multi_character_representation_with_boundaries() -> None:
-	representation = ArbitraryRepresentation({
-		MorseSymbol.DOT: "dot",
-		MorseSymbol.DASH: "dash",
-	})
+	representation = ArbitraryRepresentation(
+		{
+			MorseSymbol.DOT: "dot",
+			MorseSymbol.DASH: "dash",
+		}
+	)
 
 	parser = SpacedParser(representation)
 
-	stream = parser.parse(
-		"dotdotdash dashdotdot dotdash"
-	)
+	stream = parser.parse("dotdotdash dashdotdot dotdash")
 
 	assert [token.type for token in stream] == [
 		MorseTokenType.SYMBOL,
@@ -155,16 +140,16 @@ def test_parse_multi_character_representation_with_boundaries() -> None:
 
 
 def test_parse_and_decode_multi_character_representation() -> None:
-	representation = ArbitraryRepresentation({
-		MorseSymbol.DOT: "dot",
-		MorseSymbol.DASH: "dash",
-	})
+	representation = ArbitraryRepresentation(
+		{
+			MorseSymbol.DOT: "dot",
+			MorseSymbol.DASH: "dash",
+		}
+	)
 
 	parser = SpacedParser(representation)
 	decoder = MorseDecoder(InternationalMorse())
 
-	stream = parser.parse(
-		"dotdotdot dashdashdash dotdotdot"
-	)
+	stream = parser.parse("dotdotdot dashdashdash dotdotdot")
 
 	assert decoder.decode(stream) == "SOS"

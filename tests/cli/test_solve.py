@@ -5,9 +5,7 @@ from typer.testing import CliRunner
 from morse.cli.app import app
 
 
-def test_solve_unspaced_morse(
-	runner: CliRunner, dictionary_file: Path
-) -> None:
+def test_solve_unspaced_morse(runner: CliRunner, dictionary_file: Path) -> None:
 	result = runner.invoke(
 		app,
 		["solve", "......-...-..---", "-d", str(dictionary_file)],
@@ -17,9 +15,7 @@ def test_solve_unspaced_morse(
 	assert "1. hello" in result.stdout
 
 
-def test_solve_from_stdin(
-	runner: CliRunner, dictionary_file: Path
-) -> None:
+def test_solve_from_stdin(runner: CliRunner, dictionary_file: Path) -> None:
 	result = runner.invoke(
 		app,
 		["solve", "-d", str(dictionary_file)],
@@ -30,9 +26,7 @@ def test_solve_from_stdin(
 	assert "1. hello" in result.stdout
 
 
-def test_solve_limit(
-	runner: CliRunner, dictionary_file: Path
-) -> None:
+def test_solve_limit(runner: CliRunner, dictionary_file: Path) -> None:
 	result = runner.invoke(
 		app,
 		["solve", "......-...-..---", "-d", str(dictionary_file), "-n", "1"],
@@ -43,9 +37,7 @@ def test_solve_limit(
 	assert len(lines) == 1
 
 
-def test_solve_no_solution(
-	runner: CliRunner, dictionary_file: Path
-) -> None:
+def test_solve_no_solution(runner: CliRunner, dictionary_file: Path) -> None:
 	result = runner.invoke(
 		app,
 		["solve", "--------------------", "-d", str(dictionary_file)],

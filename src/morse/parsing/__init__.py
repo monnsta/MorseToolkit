@@ -8,11 +8,11 @@ from .unspaced import *
 
 
 __all__ = (
-	'MorseParser',
-	'MorseBoundarySyntax',
-	'MorseTokenizer',
-	'RawToken',
-	'TokenType',
-	'SpacedParser',
-	'UnspacedParser',
+	"MorseParser",
+	"MorseBoundarySyntax",
+	"MorseTokenizer",
+	"RawToken",
+	"TokenType",
+	"SpacedParser",
+	"UnspacedParser",
 )

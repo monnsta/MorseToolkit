@@ -29,17 +29,17 @@ def encode_unspaced(text: str) -> MorseSequence:
 		if character == " ":
 			continue
 
-		symbols.extend(
-			alphabet.encode(character)
-		)
+		symbols.extend(alphabet.encode(character))
 
 	return MorseSequence.from_symbols(symbols)
 
 
 def test_solve_single_word() -> None:
-	solver = make_solver([
-		"hello",
-	])
+	solver = make_solver(
+		[
+			"hello",
+		]
+	)
 
 	sequence = encode_unspaced("hello")
 
@@ -50,10 +50,12 @@ def test_solve_single_word() -> None:
 
 
 def test_solve_multiple_words() -> None:
-	solver = make_solver([
-		"hello",
-		"world",
-	])
+	solver = make_solver(
+		[
+			"hello",
+			"world",
+		]
+	)
 
 	sequence = encode_unspaced("helloworld")
 
@@ -64,11 +66,13 @@ def test_solve_multiple_words() -> None:
 
 
 def test_solve_egg_and_toast() -> None:
-	solver = make_solver([
-		"egg",
-		"and",
-		"toast",
-	])
+	solver = make_solver(
+		[
+			"egg",
+			"and",
+			"toast",
+		]
+	)
 
 	sequence = encode_unspaced("eggandtoast")
 
@@ -79,28 +83,34 @@ def test_solve_egg_and_toast() -> None:
 
 
 def test_unsolvable_sequence_returns_none() -> None:
-	solver = make_solver([
-		"hello",
-		"world",
-	])
+	solver = make_solver(
+		[
+			"hello",
+			"world",
+		]
+	)
 
-	sequence = MorseSequence((
-		MorseSymbol.DOT,
-		MorseSymbol.DOT,
-		MorseSymbol.DOT,
-		MorseSymbol.DOT,
-		MorseSymbol.DOT,
-		MorseSymbol.DOT,
-		MorseSymbol.DOT,
-	))
+	sequence = MorseSequence(
+		(
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+			MorseSymbol.DOT,
+		)
+	)
 
 	assert solver.solve(sequence) is None
 
 
 def test_empty_sequence() -> None:
-	solver = make_solver([
-		"hello",
-	])
+	solver = make_solver(
+		[
+			"hello",
+		]
+	)
 
 	result = solver.solve(MorseSequence(()))
 
@@ -113,9 +123,7 @@ def test_solver_respects_maximum_word_length() -> None:
 	solver = MorseSolver(
 		InternationalMorse(),
 		MorseDictionary(["hello"]),
-		DictionaryScorer(
-			MorseDictionary(["hello"])
-		),
+		DictionaryScorer(MorseDictionary(["hello"])),
 		max_word_length=3,
 	)
 
@@ -125,9 +133,11 @@ def test_solver_respects_maximum_word_length() -> None:
 
 
 def test_solver_prefers_higher_scoring_candidate() -> None:
-	solver = make_solver([
-		"hello",
-	])
+	solver = make_solver(
+		[
+			"hello",
+		]
+	)
 
 	sequence = encode_unspaced("hello")
 
@@ -139,13 +149,17 @@ def test_solver_prefers_higher_scoring_candidate() -> None:
 
 
 def test_solver_prefers_higher_scoring_word() -> None:
-	dictionary = MorseDictionary([
-		"hello",
-	])
+	dictionary = MorseDictionary(
+		[
+			"hello",
+		]
+	)
 
-	scorer = FrequencyScorer({
-		"hello": 10.0,
-	})
+	scorer = FrequencyScorer(
+		{
+			"hello": 10.0,
+		}
+	)
 
 	solver = MorseSolver(
 		InternationalMorse(),
@@ -163,17 +177,21 @@ def test_solver_prefers_higher_scoring_word() -> None:
 
 
 def test_solver_prefers_higher_scoring_segmentation() -> None:
-	dictionary = MorseDictionary([
-		"e",
-		"t",
-		"et",
-	])
+	dictionary = MorseDictionary(
+		[
+			"e",
+			"t",
+			"et",
+		]
+	)
 
-	scorer = FrequencyScorer({
-		"e": 1.0,
-		"t": 1.0,
-		"et": 5.0,
-	})
+	scorer = FrequencyScorer(
+		{
+			"e": 1.0,
+			"t": 1.0,
+			"et": 5.0,
+		}
+	)
 
 	solver = MorseSolver(
 		InternationalMorse(),
@@ -191,16 +209,20 @@ def test_solver_prefers_higher_scoring_segmentation() -> None:
 
 
 def test_contextual_solver_uses_previous_word() -> None:
-	dictionary = MorseDictionary([
-		"new",
-		"york",
-		"cat",
-	])
+	dictionary = MorseDictionary(
+		[
+			"new",
+			"york",
+			"cat",
+		]
+	)
 
-	scorer = BigramScorer({
-		("new", "york"): 10.0,
-		("new", "cat"): 1.0,
-	})
+	scorer = BigramScorer(
+		{
+			("new", "york"): 10.0,
+			("new", "cat"): 1.0,
+		}
+	)
 
 	solver = MorseSolver(
 		InternationalMorse(),
@@ -230,16 +252,16 @@ def test_solver_rejects_invalid_beam_width() -> None:
 	except ValueError:
 		pass
 	else:
-		raise AssertionError(
-			"Expected ValueError"
-	)
+		raise AssertionError("Expected ValueError")
 
 
 def test_context_free_solver_does_not_reject_repeated_words() -> None:
-	dictionary = MorseDictionary([
-		"the",
-		"cat",
-	])
+	dictionary = MorseDictionary(
+		[
+			"the",
+			"cat",
+		]
+	)
 
 	solver = MorseSolver(
 		InternationalMorse(),

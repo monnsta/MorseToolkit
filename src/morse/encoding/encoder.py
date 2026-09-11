@@ -35,7 +35,10 @@ class MorseEncoder:
 
 		for index, character in enumerate(value):
 			if character == " ":
-				if tokens and tokens[-1].type is MorseTokenType.CHARACTER_BOUNDARY:
+				if (
+					tokens
+					and tokens[-1].type is MorseTokenType.CHARACTER_BOUNDARY
+				):
 					tokens.pop()
 
 				tokens.append(MorseToken.word_boundary())
@@ -49,9 +52,6 @@ class MorseEncoder:
 				if previous != " ":
 					tokens.append(MorseToken.character_boundary())
 
-			tokens.extend(
-				MorseToken.symbol_token(symbol)
-				for symbol in symbols
-			)
+			tokens.extend(MorseToken.symbol_token(symbol) for symbol in symbols)
 
 		return MorseStream.from_tokens(iter(tokens))

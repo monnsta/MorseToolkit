@@ -32,11 +32,7 @@ def expand_path(value: str) -> Path:
 	Returns:
 		The expanded filesystem path.
 	"""
-	return Path(
-		os.path.expandvars(
-			os.path.expanduser(value)
-		)
-	)
+	return Path(os.path.expandvars(os.path.expanduser(value)))
 
 
 def path_completions(value: str) -> list[str]:
@@ -51,9 +47,7 @@ def path_completions(value: str) -> list[str]:
 	if not value:
 		value = "."
 
-	expanded = os.path.expandvars(
-		os.path.expanduser(value)
-	)
+	expanded = os.path.expandvars(os.path.expanduser(value))
 
 	path = Path(expanded)
 
@@ -113,4 +107,4 @@ def _replace_path_component(
 	if index == -1:
 		return name
 
-	return f"{value[:index + 1]}{name}"
+	return f"{value[: index + 1]}{name}"

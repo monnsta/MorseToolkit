@@ -25,9 +25,7 @@ def encode_command(
 		value = resolve_input(text)
 		morse = Morse()
 		result = (
-			morse.encode_unspaced(value)
-			if unspaced
-			else morse.encode(value)
+			morse.encode_unspaced(value) if unspaced else morse.encode(value)
 		)
 	except (ValueError, TypeError) as exc:
 		raise typer.BadParameter(str(exc)) from exc

@@ -26,6 +26,4 @@ class MorseBoundarySyntax:
 			raise ValueError("Word boundary cannot be empty")
 
 		if self.character_boundary == self.word_boundary:
-			raise ValueError(
-				"Character and word boundaries must be different"
-			)
+			raise ValueError("Character and word boundaries must be different")

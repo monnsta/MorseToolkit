@@ -5,20 +5,24 @@ from morse.representations import ArbitraryRepresentation
 
 
 def test_decode_single_symbol() -> None:
-	representation = ArbitraryRepresentation({
-		MorseSymbol.DOT: "dot",
-		MorseSymbol.DASH: "dash",
-	})
+	representation = ArbitraryRepresentation(
+		{
+			MorseSymbol.DOT: "dot",
+			MorseSymbol.DASH: "dash",
+		}
+	)
 
 	assert representation.decode("dot") is MorseSymbol.DOT
 	assert representation.decode("dash") is MorseSymbol.DASH
 
 
 def test_decode_sequence_with_multi_character_symbols() -> None:
-	representation = ArbitraryRepresentation({
-		MorseSymbol.DOT: "dot",
-		MorseSymbol.DASH: "dash",
-	})
+	representation = ArbitraryRepresentation(
+		{
+			MorseSymbol.DOT: "dot",
+			MorseSymbol.DASH: "dash",
+		}
+	)
 
 	assert representation.decode_sequence("dotdotdash") == (
 		MorseSymbol.DOT,
@@ -28,10 +32,12 @@ def test_decode_sequence_with_multi_character_symbols() -> None:
 
 
 def test_decode_sequence_with_single_character_symbols() -> None:
-	representation = ArbitraryRepresentation({
-		MorseSymbol.DOT: "e",
-		MorseSymbol.DASH: "r",
-	})
+	representation = ArbitraryRepresentation(
+		{
+			MorseSymbol.DOT: "e",
+			MorseSymbol.DASH: "r",
+		}
+	)
 
 	assert representation.decode_sequence("eer") == (
 		MorseSymbol.DOT,
@@ -41,10 +47,12 @@ def test_decode_sequence_with_single_character_symbols() -> None:
 
 
 def test_decode_sequence_rejects_invalid_value() -> None:
-	representation = ArbitraryRepresentation({
-		MorseSymbol.DOT: "dot",
-		MorseSymbol.DASH: "dash",
-	})
+	representation = ArbitraryRepresentation(
+		{
+			MorseSymbol.DOT: "dot",
+			MorseSymbol.DASH: "dash",
+		}
+	)
 
 	with pytest.raises(ValueError, match="Invalid Morse representation"):
 		representation.decode_sequence("dotwat")
@@ -55,10 +63,12 @@ def test_empty_representation_is_rejected() -> None:
 		ValueError,
 		match="Symbol representations cannot be empty",
 	):
-		ArbitraryRepresentation({
-			MorseSymbol.DOT: "",
-			MorseSymbol.DASH: "dash",
-		})
+		ArbitraryRepresentation(
+			{
+				MorseSymbol.DOT: "",
+				MorseSymbol.DASH: "dash",
+			}
+		)
 
 
 def test_prefix_ambiguity_is_rejected() -> None:
@@ -66,10 +76,12 @@ def test_prefix_ambiguity_is_rejected() -> None:
 		ValueError,
 		match="cannot be prefixes of each other",
 	):
-		ArbitraryRepresentation({
-			MorseSymbol.DOT: "d",
-			MorseSymbol.DASH: "dot",
-		})
+		ArbitraryRepresentation(
+			{
+				MorseSymbol.DOT: "d",
+				MorseSymbol.DASH: "dot",
+			}
+		)
 
 
 def test_duplicate_representation_is_rejected() -> None:
@@ -77,10 +89,12 @@ def test_duplicate_representation_is_rejected() -> None:
 		ValueError,
 		match="must be different",
 	):
-		ArbitraryRepresentation({
-			MorseSymbol.DOT: "x",
-			MorseSymbol.DASH: "x",
-		})
+		ArbitraryRepresentation(
+			{
+				MorseSymbol.DOT: "x",
+				MorseSymbol.DASH: "x",
+			}
+		)
 
 
 def test_missing_dot_is_rejected() -> None:
@@ -88,9 +102,11 @@ def test_missing_dot_is_rejected() -> None:
 		ValueError,
 		match="must define DOT",
 	):
-		ArbitraryRepresentation({
-			MorseSymbol.DASH: "dash",
-		})
+		ArbitraryRepresentation(
+			{
+				MorseSymbol.DASH: "dash",
+			}
+		)
 
 
 def test_missing_dash_is_rejected() -> None:
@@ -98,6 +114,8 @@ def test_missing_dash_is_rejected() -> None:
 		ValueError,
 		match="must define DASH",
 	):
-		ArbitraryRepresentation({
-			MorseSymbol.DOT: "dot",
-		})
+		ArbitraryRepresentation(
+			{
+				MorseSymbol.DOT: "dot",
+			}
+		)

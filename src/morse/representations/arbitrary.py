@@ -32,14 +32,10 @@ class ArbitraryRepresentation(MorseRepresentation):
 		values = tuple(self._mapping.values())
 
 		if any(not value for value in values):
-			raise ValueError(
-				"Symbol representations cannot be empty"
-			)
+			raise ValueError("Symbol representations cannot be empty")
 
 		if len(set(values)) != len(values):
-			raise ValueError(
-				"Dot and dash representations must be different"
-			)
+			raise ValueError("Dot and dash representations must be different")
 
 		for first in values:
 			for second in values:
@@ -49,8 +45,7 @@ class ArbitraryRepresentation(MorseRepresentation):
 					)
 
 		self._reverse_mapping = {
-			value: symbol
-			for symbol, value in self._mapping.items()
+			value: symbol for symbol, value in self._mapping.items()
 		}
 
 	def encode(self, symbol: MorseSymbol) -> str:
@@ -106,8 +101,7 @@ class ArbitraryRepresentation(MorseRepresentation):
 					break
 			else:
 				raise ValueError(
-					f"Invalid Morse representation at position "
-					f"{position}: {value[position:]!r}"
+					f"Invalid Morse representation at position {position}: {value[position:]!r}"
 				)
 
 		return tuple(symbols)

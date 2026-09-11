@@ -62,9 +62,7 @@ class InteractiveCommandRunner:
 		try:
 			parts = shlex.split(line)
 		except ValueError as exc:
-			self.console.print(
-				f"[red]Parse error:[/red] {exc}"
-			)
+			self.console.print(f"[red]Parse error:[/red] {exc}")
 			return True
 
 		if not parts:
@@ -95,9 +93,7 @@ class InteractiveCommandRunner:
 				self._raw_arguments(line),
 			)
 		except Exception as exc:
-			self.console.print(
-				f"[red]Error:[/red] {exc}"
-			)
+			self.console.print(f"[red]Error:[/red] {exc}")
 
 		return True
 
@@ -161,14 +157,10 @@ class InteractiveCommandRunner:
 			args: Command arguments containing the text to encode.
 		"""
 		if not args:
-			raise ValueError(
-				"Usage: encode <text>"
-			)
+			raise ValueError("Usage: encode <text>")
 
 		value = " ".join(args)
-		self.console.print(
-			self.morse.encode(value)
-		)
+		self.console.print(self.morse.encode(value))
 
 	def _decode(self, value: str) -> None:
 		"""Decodes spaced Morse supplied to the interactive command.
@@ -177,13 +169,9 @@ class InteractiveCommandRunner:
 			value: The Morse representation to decode.
 		"""
 		if not value.strip():
-			raise ValueError(
-				"Usage: decode <morse>"
-			)
+			raise ValueError("Usage: decode <morse>")
 
-		self.console.print(
-			self.morse.decode(value)
-		)
+		self.console.print(self.morse.decode(value))
 
 	def _solve(self, args: list[str]) -> None:
 		"""Solves unspaced Morse using the configured dictionary and scorer.
@@ -200,30 +188,22 @@ class InteractiveCommandRunner:
 			args: Morse input followed optionally by a temporary result limit.
 		"""
 		if not args:
-			raise ValueError(
-				"Usage: solve <unspaced-morse> [results]"
-			)
+			raise ValueError("Usage: solve <unspaced-morse> [results]")
 
 		value = args[0]
 		limit = self.config.results
 
 		if len(args) > 2:
-			raise ValueError(
-				"Usage: solve <unspaced-morse> [results]"
-			)
+			raise ValueError("Usage: solve <unspaced-morse> [results]")
 
 		if len(args) == 2:
 			try:
 				limit = int(args[1])
 			except ValueError as exc:
-				raise ValueError(
-					"Result count must be an integer"
-				) from exc
+				raise ValueError("Result count must be an integer") from exc
 
 			if limit < 1:
-				raise ValueError(
-					"Result count must be at least 1"
-				)
+				raise ValueError("Result count must be at least 1")
 
 		solver = self._get_solver()
 		sequence = self.morse.parse_unspaced(value)
@@ -234,15 +214,11 @@ class InteractiveCommandRunner:
 		)
 
 		if not results:
-			self.console.print(
-				"[yellow]No solution found.[/yellow]"
-			)
+			self.console.print("[yellow]No solution found.[/yellow]")
 			return
 
 		for index, result in enumerate(results, 1):
-			self.console.print(
-				f"{index}. {result.text}"
-			)
+			self.console.print(f"{index}. {result.text}")
 
 	def _get_solver(self) -> MorseSolver:
 		"""Returns the cached solver for the current configuration.
@@ -256,30 +232,21 @@ class InteractiveCommandRunner:
 		"""
 		if not self.config.dictionary:
 			raise ValueError(
-				"No dictionary configured. "
-				"Use: set dictionary <path>"
+				"No dictionary configured. Use: set dictionary <path>"
 			)
 
-		path = expand_path(
-			self.config.dictionary
-		).resolve()
+		path = expand_path(self.config.dictionary).resolve()
 
 		if not path.exists():
-			raise ValueError(
-				f"Dictionary does not exist: {path}"
-			)
+			raise ValueError(f"Dictionary does not exist: {path}")
 
 		if not path.is_file():
-			raise ValueError(
-				f"Dictionary is not a file: {path}"
-			)
+			raise ValueError(f"Dictionary is not a file: {path}")
 
 		try:
 			stat = path.stat()
 		except OSError as exc:
-			raise ValueError(
-				f"Unable to access dictionary: {path}"
-			) from exc
+			raise ValueError(f"Unable to access dictionary: {path}") from exc
 
 		cache_key = (
 			str(path),
@@ -297,9 +264,7 @@ class InteractiveCommandRunner:
 
 		words = (
 			line.strip()
-			for line in path.read_text(
-				encoding="utf-8"
-			).splitlines()
+			for line in path.read_text(encoding="utf-8").splitlines()
 			if line.strip()
 		)
 
@@ -340,21 +305,15 @@ class InteractiveCommandRunner:
 			ValueError: If the selected scorer cannot be initialized.
 		"""
 		if self.config.scorer == "dictionary":
-			return DictionaryScorer(
-				dictionary
-			)
+			return DictionaryScorer(dictionary)
 
 		if self.config.scorer == "english":
 			try:
 				return EnglishFrequencyScorer()
 			except ImportError as exc:
-				raise ValueError(
-					str(exc)
-				) from exc
+				raise ValueError(str(exc)) from exc
 
-		raise ValueError(
-			f"Unknown scorer: {self.config.scorer}"
-		)
+		raise ValueError(f"Unknown scorer: {self.config.scorer}")
 
 	def _parse(self, value: str) -> None:
 		"""Parses and displays the tokens in a Morse input.
@@ -363,16 +322,12 @@ class InteractiveCommandRunner:
 			value: The Morse representation to parse.
 		"""
 		if not value.strip():
-			raise ValueError(
-				"Usage: parse <morse>"
-			)
+			raise ValueError("Usage: parse <morse>")
 
 		stream = self.morse.parse(value)
 
 		for token in stream:
-			self.console.print(
-				f"{token.type.name.lower():<20} {token}"
-			)
+			self.console.print(f"{token.type.name.lower():<20} {token}")
 
 	def _validate(self, value: str) -> None:
 		"""Validates a spaced Morse input.
@@ -381,14 +336,10 @@ class InteractiveCommandRunner:
 			value: The Morse representation to validate.
 		"""
 		if not value.strip():
-			raise ValueError(
-				"Usage: validate <morse>"
-			)
+			raise ValueError("Usage: validate <morse>")
 
 		self.morse.parse(value)
-		self.console.print(
-			"[green]Valid Morse.[/green]"
-		)
+		self.console.print("[green]Valid Morse.[/green]")
 
 	def _set(self, args: list[str]) -> None:
 		"""Changes and persists an interactive configuration setting.
@@ -397,9 +348,7 @@ class InteractiveCommandRunner:
 			args: Setting name followed by its new value.
 		"""
 		if len(args) < 2:
-			raise ValueError(
-				"Usage: set <setting> <value>"
-			)
+			raise ValueError("Usage: set <setting> <value>")
 
 		setting = args[0].lower()
 		value = " ".join(args[1:])
@@ -421,45 +370,33 @@ class InteractiveCommandRunner:
 		elif setting in {"history", "history-enabled", "history_enabled"}:
 			self._set_history(value)
 		else:
-			raise ValueError(
-				f"Unknown setting: {setting}"
-			)
+			raise ValueError(f"Unknown setting: {setting}")
 
 	def _set_dictionary(self, value: str) -> None:
 		"""Sets and persists the dictionary path."""
 		path = expand_path(value).resolve()
 
 		if not path.exists():
-			raise ValueError(
-				f"Dictionary does not exist: {path}"
-			)
+			raise ValueError(f"Dictionary does not exist: {path}")
 
 		if not path.is_file():
-			raise ValueError(
-				f"Dictionary is not a file: {path}"
-			)
+			raise ValueError(f"Dictionary is not a file: {path}")
 
 		self.config.dictionary = str(path)
 		self.config.save()
 		self._solver_cache.clear()
 
-		self.console.print(
-			f"[green]Dictionary set to:[/green] {path}"
-		)
+		self.console.print(f"[green]Dictionary set to:[/green] {path}")
 
 	def _set_results(self, value: str) -> None:
 		"""Sets and persists the default result count."""
 		try:
 			results = int(value)
 		except ValueError as exc:
-			raise ValueError(
-				"Result count must be an integer"
-			) from exc
+			raise ValueError("Result count must be an integer") from exc
 
 		if results < 1:
-			raise ValueError(
-				"Result count must be at least 1"
-			)
+			raise ValueError("Result count must be at least 1")
 
 		self.config.results = results
 		self.config.save()
@@ -473,17 +410,13 @@ class InteractiveCommandRunner:
 		scorer = value.lower()
 
 		if scorer not in {"english", "dictionary"}:
-			raise ValueError(
-				"Scorer must be 'english' or 'dictionary'"
-			)
+			raise ValueError("Scorer must be 'english' or 'dictionary'")
 
 		self.config.scorer = scorer
 		self.config.save()
 		self._solver_cache.clear()
 
-		self.console.print(
-			f"[green]Scorer set to:[/green] {scorer}"
-		)
+		self.console.print(f"[green]Scorer set to:[/green] {scorer}")
 
 	def _set_word_boundary(self, value: str) -> None:
 		"""Sets and persists the Morse word boundary."""
@@ -492,9 +425,7 @@ class InteractiveCommandRunner:
 			word_boundary=value,
 		)
 
-		self.console.print(
-			f"[green]Word boundary set to:[/green] {value!r}"
-		)
+		self.console.print(f"[green]Word boundary set to:[/green] {value!r}")
 
 	def _set_character_boundary(self, value: str) -> None:
 		"""Sets and persists the Morse character boundary."""
@@ -518,12 +449,8 @@ class InteractiveCommandRunner:
 			word_boundary=word_boundary,
 		)
 
-		self.config.character_boundary = (
-			boundaries.character_boundary
-		)
-		self.config.word_boundary = (
-			boundaries.word_boundary
-		)
+		self.config.character_boundary = boundaries.character_boundary
+		self.config.word_boundary = boundaries.word_boundary
 
 		self.morse.boundaries = boundaries
 		self.morse.spaced_parser = SpacedParser(
@@ -538,46 +465,34 @@ class InteractiveCommandRunner:
 		try:
 			length = int(value)
 		except ValueError as exc:
-			raise ValueError(
-				"Maximum word length must be an integer"
-			) from exc
+			raise ValueError("Maximum word length must be an integer") from exc
 
 		if length < 1:
-			raise ValueError(
-				"Maximum word length must be at least 1"
-			)
+			raise ValueError("Maximum word length must be at least 1")
 
 		self.config.max_word_length = length
 		self.morse.max_word_length = length
 		self.config.save()
 		self._solver_cache.clear()
 
-		self.console.print(
-			f"[green]Max word length set to:[/green] {length}"
-		)
+		self.console.print(f"[green]Max word length set to:[/green] {length}")
 
 	def _set_beam_width(self, value: str) -> None:
 		"""Sets and persists the solver beam width."""
 		try:
 			width = int(value)
 		except ValueError as exc:
-			raise ValueError(
-				"Beam width must be an integer"
-			) from exc
+			raise ValueError("Beam width must be an integer") from exc
 
 		if width < 1:
-			raise ValueError(
-				"Beam width must be at least 1"
-			)
+			raise ValueError("Beam width must be at least 1")
 
 		self.config.beam_width = width
 		self.morse.beam_width = width
 		self.config.save()
 		self._solver_cache.clear()
 
-		self.console.print(
-			f"[green]Beam width set to:[/green] {width}"
-		)
+		self.console.print(f"[green]Beam width set to:[/green] {width}")
 
 	def _set_history(self, value: str) -> None:
 		"""Sets and persists whether command history is enabled."""
@@ -588,9 +503,7 @@ class InteractiveCommandRunner:
 		elif normalized in {"off", "false", "no", "0", "disabled"}:
 			enabled = False
 		else:
-			raise ValueError(
-				"History must be on or off"
-			)
+			raise ValueError("History must be on or off")
 
 		self.config.history_enabled = enabled
 		self.config.save()
@@ -626,15 +539,10 @@ class InteractiveCommandRunner:
 
 	def _history(self) -> None:
 		"""Displays the current history configuration."""
-		status = (
-			"enabled"
-			if self.config.history_enabled
-			else "disabled"
-		)
+		status = "enabled" if self.config.history_enabled else "disabled"
 
 		self.console.print(
-			f"History is [bold]{status}[/bold]. "
-			"Use ↑/↓ or Ctrl-R to search history."
+			f"History is [bold]{status}[/bold]. Use ↑/↓ or Ctrl-R to search history."
 		)
 
 	def _show(self) -> None:

@@ -50,11 +50,7 @@ class InteractiveConfig:
 			return cls()
 
 		try:
-			data = json.loads(
-				path.read_text(
-					encoding="utf-8"
-				)
-			)
+			data = json.loads(path.read_text(encoding="utf-8"))
 		except (OSError, json.JSONDecodeError):
 			return cls()
 
@@ -99,7 +95,8 @@ class InteractiveConfig:
 			json.dumps(
 				asdict(self),
 				indent=2,
-			) + "\n",
+			)
+			+ "\n",
 			encoding="utf-8",
 		)
 
@@ -130,34 +127,25 @@ class InteractiveConfig:
 			ValueError: If any configuration value is invalid.
 		"""
 		if not isinstance(self.results, int) or self.results < 1:
-			raise ValueError(
-				"Result count must be at least 1"
-			)
+			raise ValueError("Result count must be at least 1")
 
 		if self.scorer not in {"english", "dictionary"}:
-			raise ValueError(
-				"Scorer must be 'english' or 'dictionary'"
-			)
+			raise ValueError("Scorer must be 'english' or 'dictionary'")
 
-		if not isinstance(self.max_word_length, int) or self.max_word_length < 1:
-			raise ValueError(
-				"Maximum word length must be at least 1"
-			)
+		if (
+			not isinstance(self.max_word_length, int)
+			or self.max_word_length < 1
+		):
+			raise ValueError("Maximum word length must be at least 1")
 
 		if not isinstance(self.beam_width, int) or self.beam_width < 1:
-			raise ValueError(
-				"Beam width must be at least 1"
-			)
+			raise ValueError("Beam width must be at least 1")
 
 		if not isinstance(self.character_boundary, str):
-			raise ValueError(
-				"Character boundary must be a string"
-			)
+			raise ValueError("Character boundary must be a string")
 
 		if not isinstance(self.word_boundary, str):
-			raise ValueError(
-				"Word boundary must be a string"
-			)
+			raise ValueError("Word boundary must be a string")
 
 		MorseBoundarySyntax(
 			character_boundary=self.character_boundary,
@@ -165,11 +153,7 @@ class InteractiveConfig:
 		)
 
 		if self.dictionary is not None:
-			self.dictionary = str(
-				expand_path(self.dictionary)
-			)
+			self.dictionary = str(expand_path(self.dictionary))
 
 		if not isinstance(self.history_enabled, bool):
-			raise ValueError(
-				"History enabled must be a boolean"
-			)
+			raise ValueError("History enabled must be a boolean")

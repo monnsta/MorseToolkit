@@ -56,14 +56,10 @@ class MorseSolver:
 			ValueError: If max_word_length or beam_width is less than 1.
 		"""
 		if max_word_length < 1:
-			raise ValueError(
-				"Maximum word length must be at least 1"
-			)
+			raise ValueError("Maximum word length must be at least 1")
 
 		if beam_width < 1:
-			raise ValueError(
-				"Beam width must be at least 1"
-			)
+			raise ValueError("Beam width must be at least 1")
 
 		self.alphabet = alphabet
 		self.dictionary = dictionary
@@ -131,9 +127,7 @@ class MorseSolver:
 					valid = False
 					break
 
-				word_key = (
-					word_key << length
-				) | bits
+				word_key = (word_key << length) | bits
 
 				symbol_length += length
 
@@ -146,9 +140,7 @@ class MorseSolver:
 
 	def _build_word_codes(
 		self,
-	) -> Iterator[
-		tuple[str, tuple[MorseSymbol, ...]]
-	]:
+	) -> Iterator[tuple[str, tuple[MorseSymbol, ...]]]:
 		"""Encodes dictionary words as Morse symbol tuples.
 
 		This compatibility helper retains the traditional symbol-based
@@ -228,14 +220,10 @@ class MorseSolver:
 			ValueError: If limit is less than 1.
 		"""
 		if limit < 1:
-			raise ValueError(
-				"Candidate limit must be at least 1"
-			)
+			raise ValueError("Candidate limit must be at least 1")
 
 		if not sequence:
-			return [
-				MorseCandidate("", 0.0)
-			]
+			return [MorseCandidate("", 0.0)]
 
 		if self.scorer.context_size == 0:
 			states = self._solve_without_context(
@@ -251,8 +239,7 @@ class MorseSolver:
 		return [
 			candidate
 			for candidate in (
-				self._candidate_from_state(state)
-				for state in states
+				self._candidate_from_state(state) for state in states
 			)
 			if candidate is not None
 		]
@@ -264,8 +251,7 @@ class MorseSolver:
 	) -> list[_SolverState]:
 		"""Keeps the top N paths reaching each Morse position."""
 		states: list[list[_SolverState]] = [
-			[]
-			for _ in range(len(sequence) + 1)
+			[] for _ in range(len(sequence) + 1)
 		]
 
 		states[0].append(
@@ -320,8 +306,7 @@ class MorseSolver:
 	) -> list[_SolverState]:
 		"""Keeps a bounded set of top contextual paths per position."""
 		states: list[list[_SolverState]] = [
-			[]
-			for _ in range(len(sequence) + 1)
+			[] for _ in range(len(sequence) + 1)
 		]
 
 		states[0].append(
@@ -369,11 +354,9 @@ class MorseSolver:
 					target.append(candidate)
 
 					if len(target) > capacity:
-						states[match.end] = (
-							self._prune_contextual_states(
-								target,
-								capacity,
-							)
+						states[match.end] = self._prune_contextual_states(
+							target,
+							capacity,
 						)
 
 		return self._prune_contextual_states(
@@ -389,7 +372,8 @@ class MorseSolver:
 	) -> _SolverState:
 		"""Creates an extended solver state with updated scoring metrics."""
 		return _SolverState(
-			score=current.score + self.scorer.score(
+			score=current.score
+			+ self.scorer.score(
 				word,
 				current.context,
 			),

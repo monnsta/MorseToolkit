@@ -21,8 +21,7 @@ from morse.parsing import MorseParser
 
 ```python
 class MorseParser(ABC, Generic[T]):
-	def parse(self, value: str) -> T:
-		...
+	def parse(self, value: str) -> T: ...
 ```
 
 Different parser implementations return different structures.
@@ -79,9 +78,7 @@ parser = SpacedParser(
 	boundaries=boundaries,
 )
 
-stream = parser.parse(
-	"....|.|.-..|.-..|---||.--|---|.-.|.-..|-.."
-)
+stream = parser.parse("....|.|.-..|.-..|---||.--|---|.-.|.-..|-..")
 ```
 
 Character and word boundaries must both be non-empty and must be different.
@@ -395,10 +392,12 @@ from morse.core import MorseSymbol
 from morse.parsing import SpacedParser
 from morse.representations import ArbitraryRepresentation
 
-representation = ArbitraryRepresentation({
-	MorseSymbol.DOT: "dot",
-	MorseSymbol.DASH: "dash",
-})
+representation = ArbitraryRepresentation(
+	{
+		MorseSymbol.DOT: "dot",
+		MorseSymbol.DASH: "dash",
+	}
+)
 
 parser = SpacedParser(representation)
 
@@ -421,10 +420,12 @@ The same applies to unspaced parsing:
 ```python
 from morse.parsing import UnspacedParser
 
-representation = ArbitraryRepresentation({
-	MorseSymbol.DOT: "e",
-	MorseSymbol.DASH: "r",
-})
+representation = ArbitraryRepresentation(
+	{
+		MorseSymbol.DOT: "e",
+		MorseSymbol.DASH: "r",
+	}
+)
 
 parser = UnspacedParser(representation)
 
@@ -481,9 +482,7 @@ Use `SpacedParser` when the input already contains character or word boundaries.
 ```python
 parser = SpacedParser(TextRepresentation())
 
-stream = parser.parse(
-	".... . .-.. .-.. ---   .-- --- .-. .-.. -.."
-)
+stream = parser.parse(".... . .-.. .-.. ---   .-- --- .-. .-.. -..")
 ```
 
 Use `UnspacedParser` when the input is continuous.
@@ -491,9 +490,7 @@ Use `UnspacedParser` when the input is continuous.
 ```python
 parser = UnspacedParser(TextRepresentation())
 
-sequence = parser.parse(
-	"......-...-..---"
-)
+sequence = parser.parse("......-...-..---")
 ```
 
 The difference is important:

@@ -2,10 +2,12 @@ from morse.solving.dictionary import MorseDictionary
 
 
 def test_dictionary_contains_words() -> None:
-	dictionary = MorseDictionary([
-		"hello",
-		"world",
-	])
+	dictionary = MorseDictionary(
+		[
+			"hello",
+			"world",
+		]
+	)
 
 	assert dictionary.contains("hello")
 	assert dictionary.contains("world")
@@ -13,9 +15,11 @@ def test_dictionary_contains_words() -> None:
 
 
 def test_dictionary_is_case_insensitive() -> None:
-	dictionary = MorseDictionary([
-		"Hello",
-	])
+	dictionary = MorseDictionary(
+		[
+			"Hello",
+		]
+	)
 
 	assert dictionary.contains("hello")
 	assert dictionary.contains("HELLO")
@@ -23,28 +27,34 @@ def test_dictionary_is_case_insensitive() -> None:
 
 
 def test_dictionary_strips_whitespace() -> None:
-	dictionary = MorseDictionary([
-		"  hello  ",
-	])
+	dictionary = MorseDictionary(
+		[
+			"  hello  ",
+		]
+	)
 
 	assert dictionary.contains("hello")
 
 
 def test_dictionary_supports_contains_operator() -> None:
-	dictionary = MorseDictionary([
-		"hello",
-	])
+	dictionary = MorseDictionary(
+		[
+			"hello",
+		]
+	)
 
 	assert "hello" in dictionary
 	assert "bruh" not in dictionary
 
 
 def test_dictionary_has_prefix() -> None:
-	dictionary = MorseDictionary([
-		"hello",
-		"help",
-		"world",
-	])
+	dictionary = MorseDictionary(
+		[
+			"hello",
+			"help",
+			"world",
+		]
+	)
 
 	assert dictionary.has_prefix("h")
 	assert dictionary.has_prefix("he")
@@ -57,9 +67,11 @@ def test_dictionary_has_prefix() -> None:
 
 
 def test_dictionary_is_case_insensitive_for_prefixes() -> None:
-	dictionary = MorseDictionary([
-		"Hello",
-	])
+	dictionary = MorseDictionary(
+		[
+			"Hello",
+		]
+	)
 
 	assert dictionary.has_prefix("h")
 	assert dictionary.has_prefix("HE")
@@ -67,10 +79,12 @@ def test_dictionary_is_case_insensitive_for_prefixes() -> None:
 
 
 def test_empty_words_are_ignored() -> None:
-	dictionary = MorseDictionary([
-		"",
-		"   ",
-		"hello",
-	])
+	dictionary = MorseDictionary(
+		[
+			"",
+			"   ",
+			"hello",
+		]
+	)
 
 	assert len(dictionary) == 1

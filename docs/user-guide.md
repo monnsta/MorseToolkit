@@ -109,15 +109,12 @@ from morse.representations import ArbitraryRepresentation
 from morse.core import MorseSymbol
 
 # Customize dot and dash representation
-rep = ArbitraryRepresentation({
-    MorseSymbol.DOT: "dit",
-    MorseSymbol.DASH: "dah"
-})
+rep = ArbitraryRepresentation({MorseSymbol.DOT: "dit", MorseSymbol.DASH: "dah"})
 
 toolkit = Morse(representation=rep)
 
 encoded = toolkit.encode("SOS")
-print(encoded) # ditditdit dahdahdah ditditdit
+print(encoded)  # ditditdit dahdahdah ditditdit
 ```
 
 ### Compiling Dictionaries for Solving
@@ -134,7 +131,7 @@ dictionary = toolkit.dictionary(["hello", "world", "sos", "help"])
 
 # The compiled dictionary can be passed safely to the solver
 result = toolkit.solve(toolkit.encode_unspaced("help"), dictionary)
-print(result.text) # help
+print(result.text)  # help
 ```
 
 ### Using Advanced Scorers
@@ -155,11 +152,13 @@ word_list = ["cat", "the", "bat"]
 dictionary = MorseDictionary(word_list)
 
 # Weigh specific words heavier than others
-scorer = FrequencyScorer({
-    "the": 10.0,
-    "cat": 5.0,
-    "bat": 1.0,
-})
+scorer = FrequencyScorer(
+	{
+		"the": 10.0,
+		"cat": 5.0,
+		"bat": 1.0,
+	}
+)
 
 # Under the hood, solvers use the provided Scorer to navigate ambiguous paths
 # This API sits lower in the architecture but integrates directly via the `MorseSolver`

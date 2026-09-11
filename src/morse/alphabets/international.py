@@ -104,7 +104,6 @@ class InternationalMorse(MorseAlphabet):
 			MorseSymbol.DOT,
 			MorseSymbol.DOT,
 		),
-
 		"0": (
 			MorseSymbol.DASH,
 			MorseSymbol.DASH,
@@ -175,7 +174,6 @@ class InternationalMorse(MorseAlphabet):
 			MorseSymbol.DASH,
 			MorseSymbol.DOT,
 		),
-
 		".": (
 			MorseSymbol.DOT,
 			MorseSymbol.DASH,
@@ -321,8 +319,7 @@ class InternationalMorse(MorseAlphabet):
 	def __init__(self) -> None:
 		"""Initializes the reverse lookup mapping table for decoding optimization."""
 		self._reverse_codes = {
-			code: character
-			for character, code in self._CODES.items()
+			code: character for character, code in self._CODES.items()
 		}
 
 	def encode(self, character: str) -> tuple[MorseSymbol, ...]:
@@ -340,9 +337,7 @@ class InternationalMorse(MorseAlphabet):
 		try:
 			return self._CODES[character.upper()]
 		except KeyError as exc:
-			raise ValueError(
-				f"Unsupported character: {character!r}"
-			) from exc
+			raise ValueError(f"Unsupported character: {character!r}") from exc
 
 	def decode(self, symbols: Sequence[MorseSymbol]) -> str:
 		"""Decodes a sequence of Morse symbols into its uppercase character equivalent.

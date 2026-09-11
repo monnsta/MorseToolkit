@@ -51,20 +51,16 @@ from morse.representations import MorseRepresentation
 
 
 class MyRepresentation(MorseRepresentation):
-	def encode(self, symbol: MorseSymbol) -> str:
-		...
+	def encode(self, symbol: MorseSymbol) -> str: ...
 
-	def decode(self, value: str) -> MorseSymbol:
-		...
+	def decode(self, value: str) -> MorseSymbol: ...
 
 	def decode_sequence(
 		self,
 		value: str,
-	) -> tuple[MorseSymbol, ...]:
-		...
+	) -> tuple[MorseSymbol, ...]: ...
 
-	def can_decode(self, value: str) -> bool:
-		...
+	def can_decode(self, value: str) -> bool: ...
 ```
 
 The representation is concerned only with symbol serialization. It does not determine which characters exist in an alphabet or how Morse boundaries work.
@@ -144,9 +140,9 @@ representation.decode_sequence("..x.")
 `can_decode()` can be used when you want to validate an individual symbol representation without catching an exception:
 
 ```python
-representation.can_decode(".")   # True
-representation.can_decode("-")   # True
-representation.can_decode("x")   # False
+representation.can_decode(".")  # True
+representation.can_decode("-")  # True
+representation.can_decode("x")  # False
 ```
 
 ## `ArbitraryRepresentation`
@@ -157,10 +153,12 @@ representation.can_decode("x")   # False
 from morse.core import MorseSymbol
 from morse.representations import ArbitraryRepresentation
 
-representation = ArbitraryRepresentation({
-	MorseSymbol.DOT: "s",
-	MorseSymbol.DASH: "d",
-})
+representation = ArbitraryRepresentation(
+	{
+		MorseSymbol.DOT: "s",
+		MorseSymbol.DASH: "d",
+	}
+)
 ```
 
 Now:
@@ -198,10 +196,12 @@ from morse import Morse
 from morse.core import MorseSymbol
 from morse.representations import ArbitraryRepresentation
 
-representation = ArbitraryRepresentation({
-	MorseSymbol.DOT: "s",
-	MorseSymbol.DASH: "d",
-})
+representation = ArbitraryRepresentation(
+	{
+		MorseSymbol.DOT: "s",
+		MorseSymbol.DASH: "d",
+	}
+)
 
 morse = Morse(
 	representation=representation,
@@ -232,10 +232,12 @@ A symbol representation does not have to be a single character.
 For example:
 
 ```python
-representation = ArbitraryRepresentation({
-	MorseSymbol.DOT: "dit",
-	MorseSymbol.DASH: "dah",
-})
+representation = ArbitraryRepresentation(
+	{
+		MorseSymbol.DOT: "dit",
+		MorseSymbol.DASH: "dah",
+	}
+)
 ```
 
 A Morse sequence such as:
@@ -267,9 +269,11 @@ Both Morse symbols must be defined.
 This is invalid:
 
 ```python
-ArbitraryRepresentation({
-	MorseSymbol.DOT: "s",
-})
+ArbitraryRepresentation(
+	{
+		MorseSymbol.DOT: "s",
+	}
+)
 ```
 
 It raises:
@@ -281,19 +285,23 @@ ValueError: Representation must define DASH
 Representations also cannot be empty:
 
 ```python
-ArbitraryRepresentation({
-	MorseSymbol.DOT: "",
-	MorseSymbol.DASH: "d",
-})
+ArbitraryRepresentation(
+	{
+		MorseSymbol.DOT: "",
+		MorseSymbol.DASH: "d",
+	}
+)
 ```
 
 The two representations must be different:
 
 ```python
-ArbitraryRepresentation({
-	MorseSymbol.DOT: "s",
-	MorseSymbol.DASH: "s",
-})
+ArbitraryRepresentation(
+	{
+		MorseSymbol.DOT: "s",
+		MorseSymbol.DASH: "s",
+	}
+)
 ```
 
 And neither representation may be a prefix of the other.
@@ -301,10 +309,12 @@ And neither representation may be a prefix of the other.
 For example, this is invalid:
 
 ```python
-ArbitraryRepresentation({
-	MorseSymbol.DOT: "s",
-	MorseSymbol.DASH: "sd",
-})
+ArbitraryRepresentation(
+	{
+		MorseSymbol.DOT: "s",
+		MorseSymbol.DASH: "sd",
+	}
+)
 ```
 
 Because `"s"` is a prefix of `"sd"`.
@@ -314,19 +324,23 @@ This restriction is necessary so a continuous string can be decoded unambiguousl
 A valid mapping might instead be:
 
 ```python
-ArbitraryRepresentation({
-	MorseSymbol.DOT: "s",
-	MorseSymbol.DASH: "d",
-})
+ArbitraryRepresentation(
+	{
+		MorseSymbol.DOT: "s",
+		MorseSymbol.DASH: "d",
+	}
+)
 ```
 
 Or:
 
 ```python
-ArbitraryRepresentation({
-	MorseSymbol.DOT: "dit",
-	MorseSymbol.DASH: "dah",
-})
+ArbitraryRepresentation(
+	{
+		MorseSymbol.DOT: "dit",
+		MorseSymbol.DASH: "dah",
+	}
+)
 ```
 
 ## Representations vs. Alphabets
@@ -383,19 +397,23 @@ Custom representations are useful when working with:
 For example, a protocol could represent Morse using `0` and `1`:
 
 ```python
-binary_morse = ArbitraryRepresentation({
-	MorseSymbol.DOT: "0",
-	MorseSymbol.DASH: "1",
-})
+binary_morse = ArbitraryRepresentation(
+	{
+		MorseSymbol.DOT: "0",
+		MorseSymbol.DASH: "1",
+	}
+)
 ```
 
 Or using arbitrary textual markers:
 
 ```python
-word_morse = ArbitraryRepresentation({
-	MorseSymbol.DOT: "short",
-	MorseSymbol.DASH: "long",
-})
+word_morse = ArbitraryRepresentation(
+	{
+		MorseSymbol.DOT: "short",
+		MorseSymbol.DASH: "long",
+	}
+)
 ```
 
 The rest of MorseToolkit can work with these representations without changing the alphabet itself.

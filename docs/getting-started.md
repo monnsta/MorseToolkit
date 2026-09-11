@@ -86,9 +86,7 @@ You can also decode a complete sentence:
 ```python
 import morse
 
-decoded = morse.decode(
-   ".... . .-.. .-.. ---   .-- --- .-. .-.. -.."
-)
+decoded = morse.decode(".... . .-.. .-.. ---   .-- --- .-. .-.. -..")
 
 print(decoded)
 ```
@@ -149,8 +147,8 @@ could potentially be split into different combinations of Morse characters.
 import morse
 
 result = morse.solve(
-   "......-...-..---",
-   ["hello"],
+	"......-...-..---",
+	["hello"],
 )
 
 print(result.text)
@@ -174,8 +172,8 @@ import morse
 value = morse.encode_unspaced("egg and toast")
 
 result = morse.solve(
-   value,
-   ["egg", "and", "toast"],
+	value,
+	["egg", "and", "toast"],
 )
 
 print(result.text)
@@ -216,17 +214,18 @@ from morse import Morse
 
 morse_toolkit = Morse()
 
-dictionary = morse_toolkit.dictionary([
-    "hello",
-    "world",
-    "egg",
-    "and",
-    "toast",
-])
+dictionary = morse_toolkit.dictionary(
+	[
+		"hello",
+		"world",
+		"egg",
+		"and",
+		"toast",
+	]
+)
 
 result = morse_toolkit.solve(
-   morse_toolkit.encode_unspaced("egg and toast"),
-    dictionary
+	morse_toolkit.encode_unspaced("egg and toast"), dictionary
 )
 
 print(result.text)
@@ -248,7 +247,7 @@ morse_toolkit = Morse()
 stream = morse_toolkit.parse(".... . .-.. .-.. ---")
 
 for token in stream:
-   print(token)
+	print(token)
 ```
 
 For continuous Morse, use `parse_unspaced()`:

@@ -117,8 +117,7 @@ from morse.solving import MorseScorer
 class SimpleFrequencyScorer(MorseScorer):
 	def __init__(self, frequencies: dict[str, float]) -> None:
 		self.frequencies = {
-			word.lower(): score
-			for word, score in frequencies.items()
+			word.lower(): score for word, score in frequencies.items()
 		}
 
 	@property
@@ -186,10 +185,12 @@ This allows the solver to distinguish between otherwise equally valid sequences 
 For example:
 
 ```python
-scorer = PairScorer({
-	("new", "york"): 10.0,
-	("new", "cat"): 1.0,
-})
+scorer = PairScorer(
+	{
+		("new", "york"): 10.0,
+		("new", "cat"): 1.0,
+	}
+)
 ```
 
 Given a sequence that could produce either `new york` or `new cat`, the scorer makes `new york` preferable.
@@ -308,10 +309,12 @@ from morse.solving import (
 
 alphabet = InternationalMorse()
 
-dictionary = MorseDictionary([
-	"hello",
-	"world",
-])
+dictionary = MorseDictionary(
+	[
+		"hello",
+		"world",
+	]
+)
 
 scorer = ShortWordScorer()
 
@@ -321,11 +324,7 @@ solver = MorseSolver(
 	scorer,
 )
 
-result = solver.solve(
-	morse.parse_unspaced(
-		morse.encode_unspaced("HELLO")
-	)
-)
+result = solver.solve(morse.parse_unspaced(morse.encode_unspaced("HELLO")))
 ```
 
 It can also be passed through the high-level `Morse` API:
@@ -338,9 +337,7 @@ morse = Morse(
 	scorer=ShortWordScorer(),
 )
 
-result = morse.solve(
-	morse.encode_unspaced("HELLO")
-)
+result = morse.solve(morse.encode_unspaced("HELLO"))
 ```
 
 Or supplied for an individual solve operation:
@@ -360,12 +357,14 @@ Scorers do not determine which words are valid.
 The dictionary still controls the candidate vocabulary:
 
 ```python
-dictionary = MorseDictionary([
-	"hello",
-	"world",
-	"python",
-	"morse",
-])
+dictionary = MorseDictionary(
+	[
+		"hello",
+		"world",
+		"python",
+		"morse",
+	]
+)
 ```
 
 The scorer only determines how those candidates are ranked.
@@ -515,10 +514,12 @@ For a contextual scorer:
 
 ```python
 def test_pair_scorer() -> None:
-	scorer = PairScorer({
-		("new", "york"): 10.0,
-		("new", "cat"): 1.0,
-	})
+	scorer = PairScorer(
+		{
+			("new", "york"): 10.0,
+			("new", "cat"): 1.0,
+		}
+	)
 
 	assert scorer.context_size == 1
 	assert scorer.score(
@@ -599,15 +600,13 @@ Implement:
 ```python
 class MyScorer(MorseScorer):
 	@property
-	def context_size(self) -> int:
-		...
+	def context_size(self) -> int: ...
 
 	def score(
 		self,
 		word: str,
 		context: tuple[str, ...] = (),
-	) -> float:
-		...
+	) -> float: ...
 ```
 
 Then:

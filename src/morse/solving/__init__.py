@@ -12,15 +12,15 @@ from .solver import *
 
 
 __all__ = (
-	'MorseDictionary',
-	'MorseWordMatch',
-	'MorseWordIndex',
-	'MorseScorer',
-	'DictionaryScorer',
-	'FrequencyScorer',
-	'BigramScorer',
-	'CallableFrequencyScorer',
-	'EnglishFrequencyScorer',
-	'MorseSegmenter',
-	'MorseSolver',
+	"MorseDictionary",
+	"MorseWordMatch",
+	"MorseWordIndex",
+	"MorseScorer",
+	"DictionaryScorer",
+	"FrequencyScorer",
+	"BigramScorer",
+	"CallableFrequencyScorer",
+	"EnglishFrequencyScorer",
+	"MorseSegmenter",
+	"MorseSolver",
 )

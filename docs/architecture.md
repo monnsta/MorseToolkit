@@ -939,17 +939,13 @@ Implement:
 
 ```python
 class MorseAlphabet(ABC):
-	def encode(self, character):
-		...
+	def encode(self, character): ...
 
-	def decode(self, symbols):
-		...
+	def decode(self, symbols): ...
 
-	def can_encode(self, character):
-		...
+	def can_encode(self, character): ...
 
-	def can_decode(self, symbols):
-		...
+	def can_decode(self, symbols): ...
 ```
 
 The encoding and solving systems can then use the new alphabet.
@@ -1030,16 +1026,14 @@ Several core structures are immutable:
 
 ```python
 @dataclass(frozen=True, slots=True)
-class MorseCandidate:
-	...
+class MorseCandidate: ...
 ```
 
 and:
 
 ```python
 @dataclass(frozen=True, slots=True)
-class MorseSequence:
-	...
+class MorseSequence: ...
 ```
 
 The underlying collections are also stored as tuples.

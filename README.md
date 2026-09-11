@@ -99,8 +99,8 @@ A dictionary (preferably an english word list) can be supplied to determine how 
 import morse
 
 result = morse.solve(
-   "......-...-..---.-----.-..-..-..",
-   ["hello", "world"],
+	"......-...-..---.-----.-..-..-..",
+	["hello", "world"],
 )
 
 print(result.text)
@@ -113,8 +113,8 @@ For multiple words:
 import morse
 
 result = morse.solve(
-   morse.encode_unspaced("egg and toast"), # .--.--..--.-..----.-...-
-   ["egg", "and", "toast"],
+	morse.encode_unspaced("egg and toast"),  # .--.--..--.-..----.-...-
+	["egg", "and", "toast"],
 )
 
 print(result.text)
@@ -148,17 +148,18 @@ from morse import Morse
 
 morse_toolkit = Morse()
 
-dictionary = morse_toolkit.dictionary([
-    "hello",
-    "world",
-    "egg",
-    "and",
-    "toast",
-])
+dictionary = morse_toolkit.dictionary(
+	[
+		"hello",
+		"world",
+		"egg",
+		"and",
+		"toast",
+	]
+)
 
 result = morse_toolkit.solve(
-   morse_toolkit.encode_unspaced("egg and toast"),
-    dictionary
+	morse_toolkit.encode_unspaced("egg and toast"), dictionary
 )
 
 print(result.text)
@@ -177,7 +178,7 @@ morse_toolkit = Morse()
 stream = morse_toolkit.parse(".... . .-.. .-.. ---")
 
 for token in stream:
-   print(token)
+	print(token)
 ```
 
 Continuous Morse can similarly be parsed into a `MorseSequence`:
@@ -199,13 +200,15 @@ from morse import Morse
 from morse.core import MorseSymbol
 from morse.representations import ArbitraryRepresentation
 
-representation = ArbitraryRepresentation({
-   MorseSymbol.DOT: "s",
-   MorseSymbol.DASH: "d",
-})
+representation = ArbitraryRepresentation(
+	{
+		MorseSymbol.DOT: "s",
+		MorseSymbol.DASH: "d",
+	}
+)
 
 morse_toolkit = Morse(
-   representation=representation,
+	representation=representation,
 )
 
 encoded = morse_toolkit.encode("HELLO")

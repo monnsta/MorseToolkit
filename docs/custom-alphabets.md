@@ -18,26 +18,22 @@ class MyAlphabet(MorseAlphabet):
 	def encode(
 		self,
 		character: str,
-	) -> tuple[MorseSymbol, ...]:
-		...
+	) -> tuple[MorseSymbol, ...]: ...
 
 	def decode(
 		self,
 		symbols: Sequence[MorseSymbol],
-	) -> str:
-		...
+	) -> str: ...
 
 	def can_encode(
 		self,
 		character: str,
-	) -> bool:
-		...
+	) -> bool: ...
 
 	def can_decode(
 		self,
 		symbols: Sequence[MorseSymbol],
-	) -> bool:
-		...
+	) -> bool: ...
 ```
 
 Every alphabet must implement four operations:
@@ -85,9 +81,7 @@ class SimpleAlphabet(MorseAlphabet):
 		try:
 			return self._CODES[character.upper()]
 		except KeyError as exc:
-			raise ValueError(
-				f"Unsupported character: {character!r}"
-			) from exc
+			raise ValueError(f"Unsupported character: {character!r}") from exc
 
 	def decode(
 		self,
@@ -99,9 +93,7 @@ class SimpleAlphabet(MorseAlphabet):
 			if code == symbols:
 				return character
 
-		raise ValueError(
-			f"Unsupported Morse sequence: {symbols!r}"
-		)
+		raise ValueError(f"Unsupported Morse sequence: {symbols!r}")
 
 	def can_encode(
 		self,
@@ -147,23 +139,27 @@ For example, the alphabet above explicitly normalizes characters with `.upper()`
 `decode()` receives a sequence of `MorseSymbol` objects representing one character.
 
 ```python
-alphabet.decode((
-	MorseSymbol.DOT,
-	MorseSymbol.DASH,
-))
+alphabet.decode(
+	(
+		MorseSymbol.DOT,
+		MorseSymbol.DASH,
+	)
+)
 # "A"
 ```
 
 An unknown sequence should raise `ValueError`.
 
 ```python
-alphabet.decode((
-	MorseSymbol.DOT,
-	MorseSymbol.DOT,
-	MorseSymbol.DOT,
-	MorseSymbol.DOT,
-	MorseSymbol.DOT,
-))
+alphabet.decode(
+	(
+		MorseSymbol.DOT,
+		MorseSymbol.DOT,
+		MorseSymbol.DOT,
+		MorseSymbol.DOT,
+		MorseSymbol.DOT,
+	)
+)
 # ValueError
 ```
 
@@ -295,8 +291,7 @@ A larger alphabet can instead maintain a reverse mapping:
 
 ```python
 self._reverse_codes = {
-	code: character
-	for character, code in self._CODES.items()
+	code: character for character, code in self._CODES.items()
 }
 ```
 

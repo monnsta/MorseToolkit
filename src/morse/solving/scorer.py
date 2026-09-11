@@ -87,9 +87,7 @@ class FrequencyScorer(MorseScorer):
 			ValueError: If default_score or any frequency values are negative.
 		"""
 		if default_score < 0.0:
-			raise ValueError(
-				"Default score cannot be negative"
-			)
+			raise ValueError("Default score cannot be negative")
 
 		self._frequencies = {
 			word.strip().lower(): score
@@ -99,9 +97,7 @@ class FrequencyScorer(MorseScorer):
 		self._default_score = default_score
 
 		if any(score < 0.0 for score in self._frequencies.values()):
-			raise ValueError(
-				"Word frequencies cannot be negative"
-			)
+			raise ValueError("Word frequencies cannot be negative")
 
 	def score(
 		self,
@@ -152,9 +148,7 @@ class BigramScorer(MorseScorer):
 			ValueError: If default_score or any transition scores are negative.
 		"""
 		if default_score < 0.0:
-			raise ValueError(
-				"Default score cannot be negative"
-			)
+			raise ValueError("Default score cannot be negative")
 
 		self._transitions = {
 			(
@@ -167,9 +161,7 @@ class BigramScorer(MorseScorer):
 		self._default_score = default_score
 
 		if any(score < 0.0 for score in self._transitions.values()):
-			raise ValueError(
-				"Transition scores cannot be negative"
-			)
+			raise ValueError("Transition scores cannot be negative")
 
 	def score(
 		self,
@@ -233,9 +225,7 @@ class CallableFrequencyScorer(MorseScorer):
 		"""
 		_ = context
 
-		return self._frequency(
-			word.strip().lower()
-		)
+		return self._frequency(word.strip().lower())
 
 	@property
 	def context_size(self) -> int:
@@ -267,7 +257,5 @@ class EnglishFrequencyScorer(CallableFrequencyScorer):
 			) from exc
 
 		super().__init__(
-			frequency=lambda word: (
-				zipf_frequency(word, "en") - 9.0
-			),
+			frequency=lambda word: zipf_frequency(word, "en") - 9.0,
 		)
